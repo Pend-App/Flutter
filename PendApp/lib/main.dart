@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:pend_tech/Services/authservices.dart';
 import 'package:pend_tech/screen/intro/login.dart';
 import 'package:pend_tech/screen/intro/on_Boarding.dart';
 import 'package:pend_tech/screen/setting/themes.dart';
@@ -9,7 +10,7 @@ import 'package:pend_tech/screen/setting/setting.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Run first apps open
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   SharedPreferences _prefs = await SharedPreferences.getInstance();
@@ -17,8 +18,6 @@ void main() async{
 }
 
 class myApp extends StatefulWidget {
-
-
   _myAppState createState() => _myAppState();
 }
 
@@ -50,17 +49,12 @@ class _myAppState extends State<myApp> {
           title: 'PEND',
           theme: snapshot.data,
           debugShowCheckedModeBanner: false,
-          home: SplashScreen(
-            themeBloc: _themeBloc,
-          ),
+          home: SplashScreen(themeBloc: _themeBloc),
 
           /// Move splash screen to onBoarding Layout
           /// Routes
           ///
-          routes: <String, WidgetBuilder>{
-            "onBoarding": (BuildContext context) =>
-                new login()
-          },
+          routes: <String, WidgetBuilder>{"onBoarding": (BuildContext context) => new login()},
         );
       },
     );
@@ -70,7 +64,9 @@ class _myAppState extends State<myApp> {
 /// Component UI
 class SplashScreen extends StatefulWidget {
   ThemeBloc themeBloc;
+
   SplashScreen({required this.themeBloc});
+
   @override
   _SplashScreenState createState() => _SplashScreenState(themeBloc);
 }
@@ -78,7 +74,9 @@ class SplashScreen extends StatefulWidget {
 /// Component UI
 class _SplashScreenState extends State<SplashScreen> {
   ThemeBloc themeBloc;
+
   _SplashScreenState(this.themeBloc);
+
   @override
 
   /// Setting duration in splash screen
@@ -100,39 +98,29 @@ class _SplashScreenState extends State<SplashScreen> {
 
   /// Code Create UI Splash Screen
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: FutureBuilder(
         future: Firebase.initializeApp(),
-        builder: (context,snapshot)
-        {
-          if(snapshot.hasError)
-          {
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
             return Container();
           }
-          if(snapshot.connectionState == ConnectionState.done)
-          {
+          if (snapshot.connectionState == ConnectionState.done) {
             return Container(
               /// Set Background image in splash screen layout (Click to open code)
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('assets/image/splash_screen.png'),
-                      fit: BoxFit.cover)),
+              decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/image/splash_screen.png'), fit: BoxFit.cover)),
               child: Container(
                 /// Set gradient black in image splash screen (Click to open code)
                 decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        colors: [
-                          Colors.white,
-                          Colors.white,
-                        ],
-                        begin: FractionalOffset.topCenter,
-                        end: FractionalOffset.bottomCenter)),
+                    gradient: LinearGradient(colors: [
+                  Colors.white,
+                  Colors.white,
+                ], begin: FractionalOffset.topCenter, end: FractionalOffset.bottomCenter)),
                 child: Center(
                   child: Container(
                     decoration: BoxDecoration(
-                      image:  DecorationImage(
+                      image: DecorationImage(
                         image: AssetImage("assets/image/logoSplash.jpg"),
                         fit: BoxFit.cover,
                       ),
@@ -144,10 +132,11 @@ class _SplashScreenState extends State<SplashScreen> {
                           spreadRadius: 5,
                           blurRadius: 7,
                           offset: Offset(0, 5), // changes position of shadow
-                        ),                      ],
+                        ),
+                      ],
                     ),
-                    height: MediaQuery.of(context).size.width/3,
-                    width: MediaQuery.of(context).size.width/3,
+                    height: MediaQuery.of(context).size.width / 3,
+                    width: MediaQuery.of(context).size.width / 3,
                   ),
                 ),
               ),

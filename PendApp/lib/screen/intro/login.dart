@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
+
 import 'package:pend_tech/screen/intro/forget_password.dart';
 import 'package:pend_tech/screen/intro/signup.dart';
+import 'package:pend_tech/screen/osama/home.dart';
 import 'package:pend_tech/screen/setting/themes.dart';
-import 'package:flutter/material.dart';
 import 'package:pend_tech/component/style.dart';
 
 class login extends StatefulWidget {
@@ -227,6 +229,8 @@ class _loginState extends State<login> {
                               formState.save();
 
                             }
+                            //Todo:
+                            Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => HomeScreen(key: UniqueKey(),)));
                           },
                           child: Container(
                             height: 50.0,
