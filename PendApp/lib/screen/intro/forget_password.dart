@@ -20,7 +20,7 @@ class _forgetPasswordState extends State<forgetPassword> {
       body: Container(
         height: double.infinity,
         width: double.infinity,
-        decoration: BoxDecoration(color: colorStyle.background),
+        decoration: BoxDecoration(color: colorStyle.primaryColor),
         child: Stack(
           children: <Widget>[
             ///

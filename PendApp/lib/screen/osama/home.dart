@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pend_tech/component/style.dart';
+import 'shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({required Key key}) : super(key: key);
@@ -9,6 +11,21 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+
+    //test encryption
+    print('encrypting');
+    setKeys('public key', 'private key010ll').then((value) {
+      print('getting keys');
+      return getKeys();
+    }).then((value) {
+      if(value != null) {
+        print((value as List)[0]);
+        print((value as List)[1]);
+      }
+      else
+        print('failed :(');
+    });
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -36,22 +53,23 @@ class _HomeScreenState extends State<HomeScreen> {
     return Stack(
       children: <Widget>[
         Container(
-          color: Color.fromRGBO(17, 27, 195,1),
-          padding: EdgeInsets.only(left: 20.0, bottom: 70.0),
+          color: colorStyle.primaryColor,
+          padding: EdgeInsets.only(left: 20.0, bottom: 70.0, right:  20.0),
           child: Stack(
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(top: 15.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text("WALLET CASH",
                             style: TextStyle(
                               color: Colors.grey[200],
-                              fontSize: 14.0,
+                              fontSize: 18.0,
                               fontWeight: FontWeight.w400,
                             )),
                         Padding(
@@ -81,58 +99,30 @@ class _HomeScreenState extends State<HomeScreen> {
                             ],
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10.0),
-                          child: Row(
-                            children: <Widget>[
-                              Text("WALLET POINTS",
-                                  style: TextStyle(
-                                    color: Colors.grey[200],
-                                    fontSize: 14.0,
-                                    fontFamily: "Sans",
-                                    fontWeight: FontWeight.w400,
-                                  )),
-                              Text(
-                                " 0",
-                                style: TextStyle(
-                                  color: Color(0xffd0993c),
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+
                       ],
                     ),
-                    Row(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.all(10.0),
-                          child: Icon(
-                            Icons.refresh,
-                            color: Colors.white,
-                            size: 28.0,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 10.0),
-                          child: Container(
-                            height: 45.0,
-                            width: 100.0,
-                            child: RaisedButton(
-                              child: Text(
-                                "TOP UP",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
-                              color: Color(0xFF14b8c7),
-                              onPressed: () {},
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Row(
+                        children: <Widget>[
+                          Text("WALLET POINTS",
+                              style: TextStyle(
+                                color: Colors.grey[200],
+                                fontSize: 14.0,
+                                fontFamily: "Sans",
+                                fontWeight: FontWeight.w400,
+                              )),
+                          Text(
+                            " 0",
+                            style: TextStyle(
+                              color: Color(0xffd0993c),
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -170,11 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         height: 7.0,
                       ),
-                      Text("Transfer",
-                          style: TextStyle(
-                              color: Color(0xFF4d2a86),
-                              fontFamily: "Popins",
-                              fontSize: 13.0)),
+                      Text("Transfer", style: TextStyle(color: colorStyle.primaryColor.withOpacity(0.8), fontFamily: "Popins", fontSize: 13.0)),
                     ],
                   ),
                 ),
@@ -197,9 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         height: 4.0,
                       ),
-                      Text("Scan",
-                          style: TextStyle(
-                              color: Color(0xFF4d2a86), fontFamily: "Popins")),
+                      Text("Scan", style: TextStyle(color:colorStyle.primaryColor.withOpacity(0.8), fontFamily: "Popins")),
                     ],
                   ),
                 ),
@@ -222,9 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         height: 8.0,
                       ),
-                      Text("Profile",
-                          style: TextStyle(
-                              color: Color(0xFF4d2a86), fontFamily: "Popins")),
+                      Text("Profile", style: TextStyle(color: colorStyle.primaryColor.withOpacity(0.8), fontFamily: "Popins")),
                     ],
                   ),
                 ),
@@ -244,10 +226,8 @@ class _HomeScreenState extends State<HomeScreen> {
           children: <Widget>[
             cardMenuBottom("assets/image/Template_3/menu_home.png", "Home"),
             cardMenuBottom("assets/image/Template_3/menu_bus.png", "Transport"),
-            cardMenuBottom(
-                "assets/image/Template_3/menu_shopping.png", "Shopping"),
-            cardMenuBottom(
-                "assets/image/Template_3/menu_tv.png", "Entertainment"),
+            cardMenuBottom("assets/image/Template_3/menu_shopping.png", "Shopping"),
+            cardMenuBottom("assets/image/Template_3/menu_tv.png", "Entertainment"),
             SizedBox(
               height: 20.0,
             )
@@ -263,16 +243,13 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Container(
         height: 90.0,
         width: double.infinity,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 10.0,
-                spreadRadius: 2.0,
-              )
-            ]),
+        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10.0)), color: Colors.white, boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 10.0,
+            spreadRadius: 2.0,
+          )
+        ]),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -280,17 +257,15 @@ class _HomeScreenState extends State<HomeScreen> {
             Container(
               height: 110.0,
               width: 4.5,
-              decoration: BoxDecoration(
-                  color: Color(0xFF4d2a86),
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20.0),
-                      bottomLeft: Radius.circular(20.0))),
+              decoration:
+                  BoxDecoration(color: colorStyle.primaryColor.withOpacity(0.8), borderRadius: BorderRadius.only(topLeft: Radius.circular(20.0), bottomLeft: Radius.circular(20.0))),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 10.0),
               child: Image.asset(
                 img,
                 height: 20.0,
+                color: colorStyle.primaryColor.withOpacity(0.8),
               ),
             ),
             Padding(
@@ -301,11 +276,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     title,
-                    style: TextStyle(
-                        fontFamily: "Sans",
-                        fontWeight: FontWeight.w400,
-                        fontSize: 16.5,
-                        color: Colors.black54),
+                    style: TextStyle(fontFamily: "Sans", fontWeight: FontWeight.w400, fontSize: 16.5, color: Colors.black54),
                   ),
                 ),
               ),

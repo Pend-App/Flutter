@@ -157,15 +157,14 @@ class _settingState extends State<setting> {
         'light',
         ThemeData(
           brightness: Brightness.light,
-          accentColor: colorStyle.primaryColor,
           primaryColor: colorStyle.primaryColor,
-          buttonColor: colorStyle.primaryColor,
-          cardColor: colorStyle.cardColorLight,
-          textSelectionColor: colorStyle.fontColorLight,
           scaffoldBackgroundColor: Color(0xFFFDFDFD),
-          canvasColor: colorStyle.whiteBacground,
-          dividerColor: colorStyle.iconColorLight,
-          hintColor: colorStyle.fontSecondaryColorLight,
+          // cardColor: colorStyle.cardColorLight,
+          // textSelectionColor: colorStyle.fontColorLight,
+          // canvasColor: colorStyle.whiteBacground,
+          // dividerColor: colorStyle.iconColorLight,
+          // hintColor: colorStyle.fontSecondaryColorLight,
+          colorScheme: ColorScheme.fromSwatch().copyWith(secondary: colorStyle.primaryColor),
         ));
   }
 
@@ -177,16 +176,14 @@ class _settingState extends State<setting> {
         'dark',
         ThemeData(
             brightness: Brightness.dark,
-            scaffoldBackgroundColor: colorStyle.background,
-            backgroundColor: colorStyle.blackBackground,
-            dividerColor: colorStyle.iconColorDark,
+            scaffoldBackgroundColor: colorStyle.primaryColor,
+            // backgroundColor: colorStyle.blackBackground,
+            // dividerColor: colorStyle.iconColorDark,
             accentColor: colorStyle.primaryColor,
             primaryColor: colorStyle.primaryColor,
-            hintColor: colorStyle.fontSecondaryColorDark,
-            buttonColor: colorStyle.primaryColor,
-            canvasColor: colorStyle.grayBackground,
-            cardColor: colorStyle.grayBackground,
-            textSelectionColor: colorStyle.fontColorDark,
-            textSelectionHandleColor: colorStyle.fontColorDarkTitle));
+            // hintColor: colorStyle.fontSecondaryColorDark,
+            // canvasColor: colorStyle.grayBackground,
+            // cardColor: colorStyle.grayBackground,
+        ));
   }
 }

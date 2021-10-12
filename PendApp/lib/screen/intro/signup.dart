@@ -8,12 +8,14 @@ import 'package:pend_tech/component/style.dart';
 
 class signUp extends StatefulWidget {
   signUp();
+
   @override
   _signUpState createState() => _signUpState();
 }
 
 class _signUpState extends State<signUp> {
   _signUpState();
+
   @override
   final TextEditingController _phone = TextEditingController();
   final TextEditingController _otp = TextEditingController();
@@ -32,21 +34,20 @@ class _signUpState extends State<signUp> {
         codeSent: (String verificationId, int? resendToken) {},
         codeAutoRetrievalTimeout: (String verificationId) {},
       );
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
 
-    return  FirebasePhoneAuthProvider(
+    return FirebasePhoneAuthProvider(
       child: Scaffold(
         body: Container(
           height: double.infinity,
           width: double.infinity,
 
           /// Set Background image in splash screen layout (Click to open code)
-          decoration: BoxDecoration(color: colorStyle.background),
+          decoration: BoxDecoration(color: colorStyle.primaryColor),
           child: Stack(
             children: <Widget>[
               ///
@@ -55,10 +56,7 @@ class _signUpState extends State<signUp> {
               Container(
                 height: 129.0,
                 width: double.infinity,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage("assets/image/signupHeader.png"),
-                        fit: BoxFit.cover)),
+                decoration: BoxDecoration(image: DecorationImage(image: AssetImage("assets/image/signupHeader.png"), fit: BoxFit.cover)),
               ),
               Container(
                 height: double.infinity,
@@ -70,8 +68,7 @@ class _signUpState extends State<signUp> {
                     children: <Widget>[
                       /// Animation text marketplace to choose Login with Hero Animation (Click to open code)
                       Padding(
-                        padding:
-                        EdgeInsets.only(top: mediaQuery.padding.top + 130.0),
+                        padding: EdgeInsets.only(top: mediaQuery.padding.top + 130.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
@@ -79,241 +76,211 @@ class _signUpState extends State<signUp> {
                           ],
                         ),
                       ),
-                      state==false
-                          ?Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 20.0, right: 20.0, top: 40.0),
-                            child: _buildTextFeild(
-                                widgetIcon: Icon(
-                                  Icons.people,
-                                  color: colorStyle.primaryColor,
-                                  size: 20,
+                      state == false
+                          ? Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 40.0),
+                                  child: _buildTextFeild(
+                                      widgetIcon: Icon(
+                                        Icons.people,
+                                        color: colorStyle.whiteColor,
+                                        size: 20,
+                                      ),
+                                      controller: _phone,
+                                      hint: 'phone number',
+                                      obscure: false,
+                                      keyboardType: TextInputType.emailAddress,
+                                      textAlign: TextAlign.start),
                                 ),
-                                controller: _phone,
-                                hint: 'phone number',
-                                obscure: false,
-                                keyboardType: TextInputType.emailAddress,
-                                textAlign: TextAlign.start),
-                          ),
-
-                          verify==false
-                              ?Padding(
-                            padding: const EdgeInsets.only(top:20,left: 20.0, right: 20.0),
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  verify = true;
-                                });
-                              },
-                              child: Container(
-                                height: 50.0,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                  BorderRadius.all(Radius.circular(0.0)),
-                                  border: Border.all(
-                                    color: colorStyle.primaryColor,
-                                    width: 0.35,
-                                  ),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    "SEND OTP",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 17.5,
-                                        letterSpacing: 1.9),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                              : FirebasePhoneAuthHandler(
-                            phoneNumber: "+2"+_phone.text,
-                            timeOutDuration: const Duration(seconds: 60),
-                            onLoginSuccess: (userCredential, autoVerified) async {
-                              print(autoVerified
-                                  ? "OTP was fetched automatically"
-                                  : "OTP was verified manually");
-
-                              print("Login Success UID: ${userCredential.user?.uid}");
-                              setState(() {
-                                state = true;
-                              });
-                            },
-                            onLoginFailed: (authException) {
-                              print("An error occurred: ${authException.message}");
-
-                              // handle error further if needed
-                            },
-                            builder: (context, controller) {
-
-                              return  Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 20.0, right: 20.0, top: 40.0),
-                                    child: _buildTextFeild(
-                                        widgetIcon: Icon(
-                                          Icons.security,
-                                          color: colorStyle.primaryColor,
-                                          size: 20,
-                                        ),
-                                        controller: _otp,
-                                        hint: 'OTP',
-                                        obscure: false,
-                                        keyboardType: TextInputType.emailAddress,
-                                        textAlign: TextAlign.start),
-                                  ),
-                                  SizedBox(height: 20,),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-                                    child: GestureDetector(
-                                      onTap: () async {
-                                        if (_otp.text.length != 6) {
-                                          print("Please enter a valid 6 digit OTP");
-                                        } else {
-                                          final res =
-                                          await controller.verifyOTP(otp: _otp.text);
-                                          // Incorrect OTP
-                                          if (!res)
-                                            print(
-                                              "Please enter the correct OTP sent",
-                                            );
-                                        }
-                                      },
-                                      child: Container(
-                                        height: 50.0,
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                          BorderRadius.all(Radius.circular(0.0)),
-                                          border: Border.all(
-                                            color: colorStyle.primaryColor,
-                                            width: 0.35,
+                                verify == false
+                                    ? Padding(
+                                        padding: const EdgeInsets.only(top: 20, left: 20.0, right: 20.0),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              verify = true;
+                                            });
+                                          },
+                                          child: Container(
+                                            height: 50.0,
+                                            width: double.infinity,
+                                            decoration: BoxDecoration(
+                                              color: colorStyle.blueColor,
+                                              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                                              border: Border.all(
+                                                color: colorStyle.blueColor,
+                                                width: 0.35,
+                                              ),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                "SEND OTP",
+                                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 17.5, letterSpacing: 1.9),
+                                              ),
+                                            ),
                                           ),
                                         ),
-                                        child: Center(
-                                          child: Text(
-                                            "Verify",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 17.5,
-                                                letterSpacing: 1.9),
-                                          ),
+                                      )
+                                    : FirebasePhoneAuthHandler(
+                                        phoneNumber: "+2" + _phone.text,
+                                        timeOutDuration: const Duration(seconds: 60),
+                                        onLoginSuccess: (userCredential, autoVerified) async {
+                                          print(autoVerified ? "OTP was fetched automatically" : "OTP was verified manually");
+
+                                          print("Login Success UID: ${userCredential.user?.uid}");
+                                          setState(() {
+                                            state = true;
+                                          });
+                                        },
+                                        onLoginFailed: (authException) {
+                                          print("An error occurred: ${authException.message}");
+
+                                          // handle error further if needed
+                                        },
+                                        builder: (context, controller) {
+                                          return Column(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 40.0),
+                                                child: _buildTextFeild(
+                                                    widgetIcon: Icon(
+                                                      Icons.security,
+                                                      color: colorStyle.whiteColor,
+                                                      size: 20,
+                                                    ),
+                                                    controller: _otp,
+                                                    hint: 'OTP',
+                                                    obscure: false,
+                                                    keyboardType: TextInputType.emailAddress,
+                                                    textAlign: TextAlign.start),
+                                              ),
+                                              SizedBox(height: 40),
+                                              Padding(
+                                                padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                                                child: GestureDetector(
+                                                  onTap: () async {
+                                                    if (_otp.text.length != 6) {
+                                                      print("Please enter a valid 6 digit OTP");
+                                                    } else {
+                                                      final res = await controller.verifyOTP(otp: _otp.text);
+                                                      // Incorrect OTP
+                                                      if (!res)
+                                                        print(
+                                                          "Please enter the correct OTP sent",
+                                                        );
+                                                    }
+                                                  },
+                                                  child: Container(
+                                                    height: 50.0,
+                                                    width: double.infinity,
+                                                    decoration: BoxDecoration(
+                                                      color: colorStyle.blueColor,
+                                                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                                                      border: Border.all(color: colorStyle.blueColor, width: 0.35),
+                                                    ),
+                                                    child: Center(
+                                                      child: Text(
+                                                        "Verify",
+                                                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 17.5, letterSpacing: 1.9),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          );
+                                        },
+                                      )
+                              ],
+                            )
+                          : Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 40.0),
+                                  child: _buildTextFeild(
+                                      widgetIcon: Icon(
+                                        Icons.people,
+                                        color: colorStyle.primaryColor,
+                                        size: 20,
+                                      ),
+                                      controller: _emailController,
+                                      hint: 'User Name',
+                                      obscure: false,
+                                      keyboardType: TextInputType.emailAddress,
+                                      textAlign: TextAlign.start),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
+                                  child: _buildTextFeild(
+                                      widgetIcon: Icon(
+                                        Icons.vpn_key,
+                                        size: 20,
+                                        color: colorStyle.primaryColor,
+                                      ),
+                                      controller: _passwordController,
+                                      hint: 'Password',
+                                      obscure: true,
+                                      keyboardType: TextInputType.emailAddress,
+                                      textAlign: TextAlign.start),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
+                                  child: _buildTextFeild(
+                                      widgetIcon: Icon(
+                                        Icons.vpn_key,
+                                        size: 20,
+                                        color: colorStyle.primaryColor,
+                                      ),
+                                      controller: _confirmpasswordController,
+                                      hint: 'Confirm Password',
+                                      obscure: true,
+                                      keyboardType: TextInputType.emailAddress,
+                                      textAlign: TextAlign.start),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 40.0),
+                                  child: GestureDetector(
+                                    //TODO: change this function
+                                    onTap: () {
+                                      final _firestore = FirebaseFirestore.instance;
+                                      DocumentReference documentReference = _firestore.collection("Request").doc(_emailController.text);
+                                      documentReference.set({
+                                        "userName": _emailController.text,
+                                        "password": _passwordController.text,
+                                        "phone": _phone.text,
+                                      });
+
+                                      setState(() {
+                                        _emailController.clear();
+                                        _passwordController.clear();
+                                        _otp.clear();
+                                        _phone.clear();
+                                        state = false;
+                                        verify = false;
+                                      });
+                                    },
+                                    child: Container(
+                                      height: 50.0,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(Radius.circular(0.0)),
+                                        color: colorStyle.primaryColor,
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          "Register",
+                                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 20.0, letterSpacing: 1.0),
                                         ),
                                       ),
                                     ),
-                                  )
-                                ],
-                              );
-                            },
-                          )
-                        ],
-                      )
-                          :Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 20.0, right: 20.0, top: 40.0),
-                            child: _buildTextFeild(
-                                widgetIcon: Icon(
-                                  Icons.people,
-                                  color: colorStyle.primaryColor,
-                                  size: 20,
-                                ),
-                                controller: _emailController,
-                                hint: 'User Name',
-                                obscure: false,
-                                keyboardType: TextInputType.emailAddress,
-                                textAlign: TextAlign.start),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 20.0, right: 20.0, top: 20.0),
-                            child: _buildTextFeild(
-                                widgetIcon: Icon(
-                                  Icons.vpn_key,
-                                  size: 20,
-                                  color: colorStyle.primaryColor,
-                                ),
-                                controller: _passwordController,
-                                hint: 'Password',
-                                obscure: true,
-                                keyboardType: TextInputType.emailAddress,
-                                textAlign: TextAlign.start),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 20.0, right: 20.0, top: 20.0),
-                            child: _buildTextFeild(
-                                widgetIcon: Icon(
-                                  Icons.vpn_key,
-                                  size: 20,
-                                  color: colorStyle.primaryColor,
-                                ),
-                                controller: _confirmpasswordController,
-                                hint: 'Confirm Password',
-                                obscure: true,
-                                keyboardType: TextInputType.emailAddress,
-                                textAlign: TextAlign.start),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 20.0, right: 20.0, top: 40.0),
-                            child: GestureDetector(
-                              onTap: () {
-                                final _firestore = FirebaseFirestore.instance;
-                                DocumentReference documentReference = _firestore
-                                    .collection("Request")
-                                    .doc(_emailController.text);
-                                documentReference.set({
-                                  "userName": _emailController.text,
-                                  "password": _passwordController.text,
-                                  "phone": _phone.text,
-                                });
-
-                                setState(() {
-                                  _emailController.clear();
-                                  _passwordController.clear();
-                                  _otp.clear();
-                                  _phone.clear();
-                                  state = false;
-                                  verify = false;
-                                });
-
-
-                              },
-                              child: Container(
-                                height: 50.0,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                  BorderRadius.all(Radius.circular(0.0)),
-                                  color: colorStyle.primaryColor,
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    "Register",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 20.0,
-                                        letterSpacing: 1.0),
                                   ),
                                 ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20.0,
-                          ),
-                        ],
-                      )
+                                SizedBox(
+                                  height: 20.0,
+                                ),
+                              ],
+                            )
 //                  Padding(
 //                    padding: const EdgeInsets.only(left:20.0,right: 20.0,bottom: 15.0),
 //                    child: Container(width: double.infinity,height: 0.15,color: colorStyle.primaryColor,),
@@ -332,7 +299,7 @@ class _signUpState extends State<signUp> {
 
   Widget _buildTextFeild({
     String? hint,
-    TextEditingController ? controller,
+    TextEditingController? controller,
     TextInputType? keyboardType,
     bool? obscure,
     String? icon,

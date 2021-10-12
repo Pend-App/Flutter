@@ -49,6 +49,8 @@ dependencies:
   cloud_firestore:
   shared_preferences:
   firebase_phone_auth_handler:
+    #encryption package
+  encrypt: ^5.0.1
 
 dev_dependencies:
   flutter_test:
