@@ -1,10 +1,16 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_phone_auth_handler/firebase_phone_auth_handler.dart';
-import 'package:pend_tech/screen/intro/login.dart';
-import 'package:pend_tech/screen/setting/themes.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart' as GetX;
+import 'package:pend_tech/Controller/WalletController.dart';
+import 'package:pend_tech/screen/osama/encryption_model.dart';
+import 'dart:math';
+import 'package:web3dart/web3dart.dart';
 import 'package:flutter/material.dart';
 import 'package:pend_tech/component/style.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'package:dio/dio.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' as Firestore;
 
 class signUp extends StatefulWidget {
   signUp();
@@ -14,28 +20,67 @@ class signUp extends StatefulWidget {
 }
 
 class _signUpState extends State<signUp> {
-  _signUpState();
 
-  @override
   final TextEditingController _phone = TextEditingController();
   final TextEditingController _otp = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmpasswordController = TextEditingController();
+  late Credentials unlocked;
   bool state = false;
   bool verify = false;
+  Dio dio = new Dio();
+  WalletController controller = GetX.Get.put((WalletController()));
 
-  Future<void> verifyPhone() async {
-    try {
-      await FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber: '+201282160015',
-        verificationCompleted: (PhoneAuthCredential credential) {},
-        verificationFailed: (FirebaseAuthException e) {},
-        codeSent: (String verificationId, int? resendToken) {},
-        codeAutoRetrievalTimeout: (String verificationId) {},
-      );
-    } catch (e) {}
+
+  Future<void> WalletCreation() async {
+    var rng = new Random.secure();
+    EthPrivateKey credentials = EthPrivateKey.createRandom(rng);
+    var address = await credentials.extractAddress();
+    Wallet wallet = Wallet.createNew(credentials, _emailController.text+_passwordController.text, rng);
+    File file = File(await controller.getFilePath()); // 1
+    file.writeAsString(encrypt(wallet.toJson())); // 2
+
+    PostIPFS(_emailController.text, _phone.text, _passwordController.text,wallet.toJson().toString());
+
+    print("Hossary"+address.hex);
+    print("Shebl"+encrypt(wallet.toJson()));
+    print("Mostafa"+decrypt(encrypt(wallet.toJson())));
+    print("Eslam"+await unlocked.toString());
+
   }
+  PostIPFS(String name,String phone,String pass,String Json) async{
+    var a = {
+      "username": name,
+      "phone": phone,
+      "password": pass,
+      "key": Json,
+    };
+
+    String username = '1zPDRpuNnp13PuZF2rKPPT05i2M';
+    String password = 'fadf76b64fcfbe02e43befe04a6e8aeb';
+    var auth = 'Basic '+base64Encode(utf8.encode('$username:$password'));
+
+    dio.post('https://ipfs.infura.io:5001/api/v0/add',
+        data: FormData.fromMap(a),
+        options: Options(headers: <String, String>{'authorization': auth})).then((value) =>
+    {
+      setState(() {
+        print("HASH"+value.data["Hash"]);
+        print("SIZE"+value.data["Size"]);
+        final _firestore = Firestore.FirebaseFirestore.instance;
+        Firestore.DocumentReference documentReference = _firestore
+            .collection("Request")
+            .doc(value.data["Hash"]);
+        documentReference.set({
+          "hash": value.data["Hash"],
+          "size": value.data["Size"],
+        });
+      })
+    });
+
+  }
+
 
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -45,14 +90,9 @@ class _signUpState extends State<signUp> {
         body: Container(
           height: double.infinity,
           width: double.infinity,
-
-          /// Set Background image in splash screen layout (Click to open code)
           decoration: BoxDecoration(color: colorStyle.primaryColor),
           child: Stack(
             children: <Widget>[
-              ///
-              /// Set image in top
-              ///
               Container(
                 height: 129.0,
                 width: double.infinity,
@@ -66,7 +106,6 @@ class _signUpState extends State<signUp> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      /// Animation text marketplace to choose Login with Hero Animation (Click to open code)
                       Padding(
                         padding: EdgeInsets.only(top: mediaQuery.padding.top + 130.0),
                         child: Row(
@@ -95,9 +134,10 @@ class _signUpState extends State<signUp> {
                                 ),
                                 verify == false
                                     ? Padding(
-                                        padding: const EdgeInsets.only(top: 20, left: 20.0, right: 20.0),
+                                        padding: const EdgeInsets.only(top: 50, left: 20.0, right: 20.0),
                                         child: GestureDetector(
                                           onTap: () {
+
                                             setState(() {
                                               verify = true;
                                             });
@@ -241,16 +281,8 @@ class _signUpState extends State<signUp> {
                                 Padding(
                                   padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 40.0),
                                   child: GestureDetector(
-                                    //TODO: change this function
                                     onTap: () {
-                                      final _firestore = FirebaseFirestore.instance;
-                                      DocumentReference documentReference = _firestore.collection("Request").doc(_emailController.text);
-                                      documentReference.set({
-                                        "userName": _emailController.text,
-                                        "password": _passwordController.text,
-                                        "phone": _phone.text,
-                                      });
-
+                                      WalletCreation();
                                       setState(() {
                                         _emailController.clear();
                                         _passwordController.clear();
@@ -302,7 +334,6 @@ class _signUpState extends State<signUp> {
     TextEditingController? controller,
     TextInputType? keyboardType,
     bool? obscure,
-    String? icon,
     TextAlign? textAlign,
     Widget? widgetIcon,
   }) {

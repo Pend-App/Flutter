@@ -47,11 +47,13 @@ dependencies:
   firebase_core:
   firebase_auth:
   cloud_firestore:
+  path_provider:
   shared_preferences:
   firebase_phone_auth_handler:
-    #encryption package
-  encrypt: ^5.0.1
-
+  web3dart:
+  http:
+  encrypt:
+  get:
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -146,117 +148,11 @@ flutter:
           weight: 500
 
   assets:
-    - assets/ilustration/boarding1.png
-    - assets/ilustration/noData.png
-    - assets/ilustration/boarding2.png
-    - assets/ilustration/boarding3.png
-    - assets/image/banner/banner1.png
-    - assets/image/banner/banner2.png
-    - assets/image/banner/banner3.jpg
-    - assets/image/banner/banner4.png
-    - assets/image/splash_screen.png
-    - assets/image/loginHeader.png
-    - assets/image/logo.png
-    - assets/image/logoSplash.jpg
-    - assets/image/signupHeader.png
-    - assets/image/gainers.png
-    - assets/image/losers.png
-    - assets/image/market/ae.png
-    - assets/image/market/aion.png
-    - assets/image/market/bat.png
-    - assets/image/market/BCH.png
-    - assets/image/market/bee.png
-    - assets/image/market/bnt.png
-    - assets/image/market/btc.png
-    - assets/image/market/dnt.png
-    - assets/image/market/elf.png
-    - assets/image/market/EOS.png
-    - assets/image/market/ETC.png
-    - assets/image/market/eth.png
-    - assets/image/market/NEO.png
-    - assets/image/market/RIPLE.png
-    - assets/image/market/bitcoin.png
-    - assets/image/article1.jpg
-    - assets/image/create_wallet.png
-    - assets/image/News_Image/Asia.jpg
-    - assets/image/News_Image/BlockStream.jpg
-    - assets/image/News_Image/BNB.jpg
-    - assets/image/News_Image/CBOE.jpg
-    - assets/image/News_Image/CryptoBroker.jpg
-    - assets/image/News_Image/EOSget.jpg
-    - assets/image/News_Image/MarketSentiment.jpg
-    - assets/image/News_Image/Mt.Gox.jpg
-    - assets/image/News_Image/NewCripto.jpg
-    - assets/image/News_Image/Twitter.jpg
-    - assets/image/News_Image/YouCan.jpg
-    - assets/image/News_Image/Ziliqa.jpg
-    - assets/image/setting/lightMode.png
-    - assets/image/setting/nightMode.png
-    - assets/image/qrCode.png
-    - assets/image/messageAppbar.png
-    - assets/image/T1_noMessage.png
-    - assets/image/icon/icon_file.png
-    - assets/image/icon/icon_image.png
-    - assets/image/icon/icon_microphone.png
-    - assets/image/icon/icon_monitor.png
-    - assets/image/icon/icon_video.png
-    - assets/avatars/avatar-1.jpg
-    - assets/avatars/avatar-2.jpg
-    - assets/avatars/avatar-3.jpg
-    - assets/avatars/avatar-4.jpg
-    - assets/avatars/avatar-5.jpg
-    - assets/avatars/avatar-6.jpg
-    - assets/avatars/avatar-7.png
-    - assets/avatars/avatar-7-line.png
-    - assets/avatars/default-avatar.jpg
-    - assets/image/crypto_icon/icon_bitcoin.png
-    - assets/image/crypto_icon/icon_bee.png
-    - assets/image/crypto_icon/icon_elf.png
-    - assets/image/crypto_icon/icon_eth.png
-    - assets/image/crypto_icon/icon_lnc.png
-    - assets/image/Template_2_image/tabBar.png
-    - assets/image/Template_3/people.png
-    - assets/image/Template_3/scan.png
-    - assets/image/Template_3/transfer.png
-    - assets/image/Template_3/menu_bus.png
-    - assets/image/Template_3/menu_home.png
-    - assets/image/Template_3/menu_shopping.png
-    - assets/image/Template_3/menu_tv.png
-    - assets/image/Template_3/slackLogo.png
-    - assets/image/Template_3/solariaLogo.jpg
-    - assets/image/Template_3/twitchLogo.png
-    - assets/image/Template_3/finance_layout/bils_finance.png
-    - assets/image/Template_3/finance_layout/doctor_finance.png
-    - assets/image/Template_3/finance_layout/hangout_finance.png
-    - assets/image/Template_3/finance_layout/lifeStyle_finance.png
-    - assets/image/Template_3/finance_layout/workout_finance.png
-    - assets/image/Template_3/deals_layout/buildingMenu.png
-    - assets/image/Template_3/deals_layout/cardMenu.png
-    - assets/image/Template_3/deals_layout/financeMenu.png
-    - assets/image/Template_3/deals_layout/findMenu.png
-    - assets/image/Template_3/deals_layout/giveMenu.png
-    - assets/image/Template_3/deals_layout/growthMenu.png
-    - assets/image/Template_3/deals_layout/locationMenu.png
-    - assets/image/Template_3/deals_layout/moneyMenu.png
-    - assets/image/Template_3/deals_layout/saveMenu.png
-    - assets/image/Template_3/deals_layout/shareMenu.png
-    - assets/image/Template_3/historyEmpty.png
-    - assets/icon/Template4/aboutapp.png
-    - assets/icon/Template4/callcenter.png
-    - assets/icon/Template4/chat.png
-    - assets/icon/Template4/creditAcount.png
-    - assets/icon/Template4/notification.png
-    - assets/icon/Template4/setting.png
-    - assets/icon/Template4/truck.png
-    - assets/image/Template_4/notifications.png
-    - assets/image/Template_4/creditCardVisa.png
-    - assets/image/Template_4/credit.png
-    - assets/image/Template_4/contact_us.png
-    - assets/image/Template_4/noMessage.png
-    - assets/image/Template_5/noTransaction.png
-    - assets/image/Template_5/alarm.png
-    - assets/image/Template_5/creditCard.png
-    - assets/image/logoApps.png
+    - assets/ilustration/
+    - assets/image/
+    - assets/avatars/
+    - assets/icon/
+    - assets/abi.json
 
 
   # To add assets to your application, add an assets section, like this:

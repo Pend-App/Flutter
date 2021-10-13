@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:pend_tech/Controller/WalletController.dart';
 
 import 'package:pend_tech/screen/intro/forget_password.dart';
 import 'package:pend_tech/screen/intro/signup.dart';
@@ -15,7 +17,7 @@ class login extends StatefulWidget {
 class _loginState extends State<login> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
+  WalletController controller = Get.put((WalletController()));
   String? _email, _pass;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -172,10 +174,8 @@ class _loginState extends State<login> {
                 padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 40.0),
                 child: GestureDetector(
                   onTap: () {
-                    final formState = _formKey.currentState;
-                    if (formState!.validate()) {
-                      formState.save();
-                    }
+                    controller.ReadWallet(_emailController.text+_passwordController.text,context);
+
                     //Todo:
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (BuildContext context) => T3_Dashboard(
@@ -205,7 +205,7 @@ class _loginState extends State<login> {
                 padding: const EdgeInsets.only(left: 20.0, right: 20.0),
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.of(context).pushReplacement(PageRouteBuilder(pageBuilder: (_, __, ___) => new signUp()));
+                    Navigator.of(context).push(PageRouteBuilder(pageBuilder: (_, __, ___) => new signUp()));
                   },
                   child: Container(
                     height: 50.0,
@@ -243,7 +243,6 @@ class _loginState extends State<login> {
     TextEditingController? controller,
     TextInputType? keyboardType,
     bool? obscure,
-    String? icon,
     TextAlign? textAlign,
     Widget? widgetIcon,
   }) {
