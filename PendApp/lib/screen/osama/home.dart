@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:pend_tech/Controller/WalletController.dart';
 import 'package:pend_tech/component/style.dart';
 import 'shared_preferences.dart';
 
@@ -9,36 +11,19 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  WalletController controller = Get.put((WalletController()));
   @override
   Widget build(BuildContext context) {
-
-    //test encryption
-    print('encrypting');
-    setKeys('public key', 'private key010ll').then((value) {
-      print('getting keys');
-      return getKeys();
-    }).then((value) {
-      if(value != null) {
-        print((value as List)[0]);
-        print((value as List)[1]);
-      }
-      else
-        print('failed :(');
-    });
-
+    controller.getBalance();
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            ///
-            /// Header here until the transfer,scan,profile box
-            ///
+
             header(),
 
-            ///
-            /// Card like home, transport, shopping, entertainment
-            ///
+
             menuBottom(),
             SizedBox(
               height: 20.0,
@@ -78,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: <Widget>[
                               Container(
                                 child: Text(
-                                  "\$",
+                                  "LE",
                                   style: TextStyle(
                                     color: Color(0xffd0993c),
                                     fontWeight: FontWeight.bold,
@@ -86,9 +71,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(left: 12.0),
+                                padding: const EdgeInsets.only(left: 20.0),
                                 child: Text(
-                                  "1250",
+                                  controller.myData.toString(),
                                   style: TextStyle(
                                     color: Color(0xffd0993c),
                                     fontSize: 30.0,

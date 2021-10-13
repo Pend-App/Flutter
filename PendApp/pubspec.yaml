@@ -150,6 +150,14 @@ flutter:
   assets:
     - assets/ilustration/
     - assets/image/
+    - assets/image/banner/
+    - assets/image/crypto_icon/
+    - assets/image/market/
+    - assets/image/News_Image/
+    - assets/image/setting/
+    - assets/image/Template_4/
+    - assets/image/Template_3/
+    - assets/image/icon/
     - assets/avatars/
     - assets/icon/
     - assets/abi.json

@@ -14,8 +14,9 @@ class WalletController extends GetxController {
 
   late Credentials unlocked;
   Dio dio = new Dio();
-  var apiUrl = "http://localhost:7545"; //Replace with your API
+  var apiUrl = "https://rinkeby.infura.io/v3/39e9e246342b4a4aa21b8a8eacb0bde2"; //Replace with your API
   var httpClient = new Client();
+  var myData = 0;
 
   Future<String> getFilePath() async {
     Directory appDocumentsDirectory = await getApplicationDocumentsDirectory(); // 1
@@ -85,7 +86,6 @@ class WalletController extends GetxController {
     return result;
   }
   Future<void> getBalance() async {
-    var myData;
     final addresss = await unlocked.extractAddress().toString();
     EthereumAddress address = EthereumAddress.fromHex(addresss);
     List<dynamic> result = await query("balanceOf",[address]);
@@ -93,6 +93,7 @@ class WalletController extends GetxController {
     print(result[0]);
     myData = result[0];
     print(myData.toString()+"YES");
+    update();
   }
   Future<void> SendTransaction() async {
     var ethClient = new Web3Client(apiUrl, httpClient);

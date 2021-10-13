@@ -44,19 +44,16 @@ class _signUpState extends State<signUp> {
     PostIPFS(_emailController.text, _phone.text, _passwordController.text,wallet.toJson().toString());
 
     print("Hossary"+address.hex);
-    print("Shebl"+encrypt(wallet.toJson()));
-    print("Mostafa"+decrypt(encrypt(wallet.toJson())));
-    print("Eslam"+await unlocked.toString());
+   print("Shebl"+encrypt(wallet.toJson()));
+   print("Mostafa"+decrypt(encrypt(wallet.toJson())));
+   print("Eslam"+await unlocked.toString());
 
   }
   PostIPFS(String name,String phone,String pass,String Json) async{
     var a = {
-      "username": name,
-      "phone": phone,
-      "password": pass,
-      "key": Json,
+      "username": name+","+phone+","+pass+","+Json,
     };
-
+    print(a);
     String username = '1zPDRpuNnp13PuZF2rKPPT05i2M';
     String password = 'fadf76b64fcfbe02e43befe04a6e8aeb';
     var auth = 'Basic '+base64Encode(utf8.encode('$username:$password'));
@@ -65,18 +62,7 @@ class _signUpState extends State<signUp> {
         data: FormData.fromMap(a),
         options: Options(headers: <String, String>{'authorization': auth})).then((value) =>
     {
-      setState(() {
-        print("HASH"+value.data["Hash"]);
-        print("SIZE"+value.data["Size"]);
-        final _firestore = Firestore.FirebaseFirestore.instance;
-        Firestore.DocumentReference documentReference = _firestore
-            .collection("Request")
-            .doc(value.data["Hash"]);
-        documentReference.set({
-          "hash": value.data["Hash"],
-          "size": value.data["Size"],
-        });
-      })
+      print(value)
     });
 
   }
@@ -122,14 +108,14 @@ class _signUpState extends State<signUp> {
                                   padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 40.0),
                                   child: _buildTextFeild(
                                       widgetIcon: Icon(
-                                        Icons.people,
+                                        Icons.phone_enabled,
                                         color: colorStyle.whiteColor,
                                         size: 20,
                                       ),
                                       controller: _phone,
                                       hint: 'phone number',
                                       obscure: false,
-                                      keyboardType: TextInputType.emailAddress,
+                                      keyboardType: TextInputType.phone,
                                       textAlign: TextAlign.start),
                                 ),
                                 verify == false
@@ -137,7 +123,6 @@ class _signUpState extends State<signUp> {
                                         padding: const EdgeInsets.only(top: 50, left: 20.0, right: 20.0),
                                         child: GestureDetector(
                                           onTap: () {
-
                                             setState(() {
                                               verify = true;
                                             });
@@ -155,7 +140,7 @@ class _signUpState extends State<signUp> {
                                             ),
                                             child: Center(
                                               child: Text(
-                                                "SEND OTP",
+                                                "Send code",
                                                 style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 17.5, letterSpacing: 1.9),
                                               ),
                                             ),
@@ -190,9 +175,9 @@ class _signUpState extends State<signUp> {
                                                       size: 20,
                                                     ),
                                                     controller: _otp,
-                                                    hint: 'OTP',
+                                                    hint: 'Code',
                                                     obscure: false,
-                                                    keyboardType: TextInputType.emailAddress,
+                                                    keyboardType: TextInputType.phone,
                                                     textAlign: TextAlign.start),
                                               ),
                                               SizedBox(height: 40),
@@ -203,6 +188,7 @@ class _signUpState extends State<signUp> {
                                                     if (_otp.text.length != 6) {
                                                       print("Please enter a valid 6 digit OTP");
                                                     } else {
+
                                                       final res = await controller.verifyOTP(otp: _otp.text);
                                                       // Incorrect OTP
                                                       if (!res)
@@ -284,10 +270,6 @@ class _signUpState extends State<signUp> {
                                     onTap: () {
                                       WalletCreation();
                                       setState(() {
-                                        _emailController.clear();
-                                        _passwordController.clear();
-                                        _otp.clear();
-                                        _phone.clear();
                                         state = false;
                                         verify = false;
                                       });
@@ -312,12 +294,16 @@ class _signUpState extends State<signUp> {
                                   height: 20.0,
                                 ),
                               ],
-                            )
-//                  Padding(
-//                    padding: const EdgeInsets.only(left:20.0,right: 20.0,bottom: 15.0),
-//                    child: Container(width: double.infinity,height: 0.15,color: colorStyle.primaryColor,),
-//                  ),
-//                  Text("Register",style: TextStyle(color: colorStyle.primaryColor,fontSize: 17.0,fontWeight: FontWeight.w800),),
+                            ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20,left: 20,right: 20),
+                        child: Container(
+                          alignment: Alignment.center,
+                          width: MediaQuery.of(context).size.width*0.8,
+                          child: Text("By creating an account you agree to our Terms of Service and Privacy Policy ©",style: TextStyle(color:  Colors.white),),
+                        ),
+                      )
+
                     ],
                   ),
                 ),

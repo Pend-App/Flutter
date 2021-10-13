@@ -79,7 +79,7 @@ class _loginState extends State<login> {
                                   contentPadding: EdgeInsets.all(0.0),
                                   filled: true,
                                   fillColor: Colors.transparent,
-                                  labelText: 'Email',
+                                  labelText: 'Pend ID',
                                   hintStyle: TextStyle(color: Colors.white),
                                   labelStyle: TextStyle(
                                     color: Colors.white70,
@@ -186,13 +186,13 @@ class _loginState extends State<login> {
                     height: 50.0,
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: colorStyle.blueColor,
+                      color: colorStyle.accentColor,
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
                     ),
                     child: Center(
                       child: Text(
                         "Sign In",
-                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 20.0, letterSpacing: 1.0),
+                        style: TextStyle(color: colorStyle.primaryColor, fontWeight: FontWeight.w400, fontSize: 20.0, letterSpacing: 1.0),
                       ),
                     ),
                   ),
@@ -205,6 +205,7 @@ class _loginState extends State<login> {
                 padding: const EdgeInsets.only(left: 20.0, right: 20.0),
                 child: GestureDetector(
                   onTap: () {
+
                     Navigator.of(context).push(PageRouteBuilder(pageBuilder: (_, __, ___) => new signUp()));
                   },
                   child: Container(
@@ -212,7 +213,7 @@ class _loginState extends State<login> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                      color: colorStyle.blueColor,
+                      color: colorStyle.accentColor,
                       border: Border.all(
                         width: 0.35,
                       ),
@@ -220,17 +221,20 @@ class _loginState extends State<login> {
                     child: Center(
                       child: Text(
                         "Create Account",
-                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 16.5, letterSpacing: 1.2),
+                        style: TextStyle(color: colorStyle.primaryColor, fontWeight: FontWeight.w400, fontSize: 16.5, letterSpacing: 1.2),
                       ),
                     ),
                   ),
                 ),
               ),
-//                  Padding(
-//                    padding: const EdgeInsets.only(left:20.0,right: 20.0,bottom: 15.0),
-//                    child: Container(width: double.infinity,height: 0.15,color: colorStyle.primaryColor,),
-//                  ),
-//                  Text("Register",style: TextStyle(color: colorStyle.primaryColor,fontSize: 17.0,fontWeight: FontWeight.w800),),
+              Padding(
+                padding: const EdgeInsets.only(top: 20,left: 20,right: 20),
+                child: Container(
+                  alignment: Alignment.center,
+                  width: MediaQuery.of(context).size.width*0.8,
+                    child: Text("By creating an account you agree to our Terms of Service and Privacy Policy ©",style: TextStyle(color:  Colors.white),),
+                ),
+              )
             ],
           ),
         ),
