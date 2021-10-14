@@ -2,12 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pend_tech/Controller/WalletController.dart';
+import 'package:pend_tech/exception/auth_exception.dart';
+import 'package:pend_tech/exception/wallet_exception.dart';
 
 import 'package:pend_tech/screen/intro/forget_password.dart';
 import 'package:pend_tech/screen/intro/signup.dart';
 import 'package:pend_tech/screen/osama/T3_Dashboard.dart';
 import 'package:pend_tech/screen/osama/alertSnakBar.dart';
-import 'package:pend_tech/screen/osama/auth_exception.dart';
 import 'package:pend_tech/screen/osama/home.dart';
 import 'package:pend_tech/screen/setting/themes.dart';
 import 'package:pend_tech/component/style.dart';
@@ -34,21 +35,14 @@ class _loginState extends State<login> {
     await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: '${_emailController.value.text}@pend.com', password: _passwordController.value.text)
         .timeout(Duration(seconds: 30));
-    ;
   }
 
   Widget build(BuildContext context) {
-
     //TODO: validate username and password not empty
     signIn() async {
-      //TODO: missing Exception handling for this method to complete
-      //TODO: [WalletCreation] not working
-      await controller.ReadWallet(_emailController.text + _passwordController.text, context);
-
-      try{
+      try {
         await signInFirebase();
-      }
-      on authException catch (e) {
+      } on authException catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(alertSnackBar(context, e.message));
         return;
       } on FirebaseAuthException catch (e) {
@@ -57,6 +51,19 @@ class _loginState extends State<login> {
       } catch (e) {
         print('other exception: $e');
         ScaffoldMessenger.of(context).showSnackBar(alertSnackBar(context, 'something went wrong. please try again later'));
+        return;
+      }
+
+      //TODO: missing Exception handling for this method to complete
+      //TODO: [WalletCreation] not working
+      try{
+      await controller.ReadWallet(_emailController.text + _passwordController.text, context);
+      } on walletException catch (e){
+        print(e);
+        ScaffoldMessenger.of(context).showSnackBar(alertSnackBar(context, 'something went wrong. please try again later'));
+        return;
+      } catch (e){
+        print('other wallet exception: $e');
         return;
       }
 
@@ -72,8 +79,14 @@ class _loginState extends State<login> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Container(
-                height: 200.0 + MediaQuery.of(context).padding.top,
-                width: MediaQuery.of(context).size.width * 0.5,
+                height: 200.0 + MediaQuery
+                    .of(context)
+                    .padding
+                    .top,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width * 0.5,
                 decoration: BoxDecoration(image: DecorationImage(image: AssetImage("assets/image/logo.png"), fit: BoxFit.scaleDown)),
               ),
               Padding(
@@ -140,7 +153,6 @@ class _loginState extends State<login> {
                       height: 53.5,
                       decoration: BoxDecoration(
                         color: Colors.black26,
-                        //              color: Color(0xFF282E41),
                         borderRadius: BorderRadius.all(Radius.circular(5.0)),
                         border: Border.all(
                           color: colorStyle.primaryColor,
@@ -215,10 +227,10 @@ class _loginState extends State<login> {
                   onTap: _isLoading
                       ? null
                       : () async {
-                          setState(() => _isLoading = true);
-                          await signIn();
-                          setState(() => _isLoading = false);
-                        },
+                    setState(() => _isLoading = true);
+                    await signIn();
+                    setState(() => _isLoading = false);
+                  },
                   child: Container(
                     height: 50.0,
                     width: double.infinity,
@@ -229,7 +241,7 @@ class _loginState extends State<login> {
                     child: Center(
                       child: _isLoading
                           ? CircularProgressIndicator(color: colorStyle.primaryColor)
-                          :  Text(
+                          : Text(
                         "Sign In",
                         style: TextStyle(color: colorStyle.primaryColor, fontWeight: FontWeight.w400, fontSize: 20.0, letterSpacing: 1.0),
                       ),
@@ -244,8 +256,8 @@ class _loginState extends State<login> {
                   onTap: _isLoading
                       ? null
                       : () {
-                          Navigator.of(context).push(PageRouteBuilder(pageBuilder: (_, __, ___) => signUp()));
-                        },
+                    Navigator.of(context).push(PageRouteBuilder(pageBuilder: (_, __, ___) => signUp()));
+                  },
                   child: Container(
                     height: 50.0,
                     width: double.infinity,
@@ -269,7 +281,10 @@ class _loginState extends State<login> {
                 padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
                 child: Container(
                   alignment: Alignment.center,
-                  width: MediaQuery.of(context).size.width * 0.8,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.8,
                   child: Text(
                     "By creating an account you agree to our Terms of Service and Privacy Policy ©",
                     style: TextStyle(color: Colors.white),
@@ -280,64 +295,6 @@ class _loginState extends State<login> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildTextFeild({
-    String? hint,
-    TextEditingController? controller,
-    TextInputType? keyboardType,
-    bool? obscure,
-    TextAlign? textAlign,
-    Widget? widgetIcon,
-  }) {
-    return Column(
-      children: <Widget>[
-        Container(
-          height: 53.5,
-          decoration: BoxDecoration(
-            color: Colors.black26,
-//              color: Color(0xFF282E41),
-            borderRadius: BorderRadius.all(Radius.circular(5.0)),
-            border: Border.all(
-              color: colorStyle.primaryColor,
-              width: 0.15,
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.only(left: 12.0, right: 12.0, top: 10.0),
-            child: Theme(
-              data: ThemeData(hintColor: Colors.transparent),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: TextFormField(
-                  style: new TextStyle(color: Colors.white),
-                  textAlign: textAlign!,
-                  obscureText: obscure!,
-                  controller: controller,
-                  keyboardType: keyboardType,
-                  autocorrect: false,
-                  autofocus: false,
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      icon: Padding(
-                        padding: const EdgeInsets.only(right: 10.0),
-                        child: widgetIcon,
-                      ),
-                      contentPadding: EdgeInsets.all(0.0),
-                      filled: true,
-                      fillColor: Colors.transparent,
-                      labelText: hint,
-                      hintStyle: TextStyle(color: Colors.white),
-                      labelStyle: TextStyle(
-                        color: Colors.white70,
-                      )),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

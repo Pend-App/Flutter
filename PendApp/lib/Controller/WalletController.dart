@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
+import 'package:pend_tech/exception/wallet_exception.dart';
 import 'package:pend_tech/screen/osama/T3_Dashboard.dart';
 import 'package:pend_tech/screen/osama/encryption_model.dart';
 import 'package:web3dart/web3dart.dart';
@@ -15,7 +16,7 @@ class WalletController extends GetxController {
   Dio dio = new Dio();
   var apiUrl = "https://rinkeby.infura.io/v3/39e9e246342b4a4aa21b8a8eacb0bde2"; //Replace with your API
   var httpClient = new Client();
-  var myData = 0;
+  var myData ;
 
   Future<String> getFilePath() async {
     Directory appDocumentsDirectory = await getApplicationDocumentsDirectory(); // 1
@@ -27,19 +28,13 @@ class WalletController extends GetxController {
 
   Future<void> ReadWallet(String passX, BuildContext context) async {
     String content = new File(await getFilePath()).readAsStringSync();
-    if (content == null || content.isEmpty) {
+    if (content.isEmpty) {
       print("NO FILE");
     } else {
-      Wallet walletss = Wallet.fromJson(decrypt(content), passX);
-      unlocked = await walletss.privateKey;
-      if (unlocked.extractAddress().toString().isNotEmpty) {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (BuildContext context) => T3_Dashboard(
-                  key: UniqueKey(),
-                )));
-      } else {
-        print("Error");
-      }
+      Wallet wallets = Wallet.fromJson(decrypt(content), passX);
+      unlocked = await wallets.privateKey;
+
+      if (unlocked.extractAddress().toString().isEmpty) throw walletException('address is empty');
     }
   }
 
@@ -76,9 +71,10 @@ class WalletController extends GetxController {
   }
 
   Future<void> getBalance() async {
-    final addresss = await unlocked.extractAddress().toString();
-    EthereumAddress address = EthereumAddress.fromHex(addresss);
+    final address = await unlocked.extractAddress();
+  //  EthereumAddress etherAddress = EthereumAddress.fromHex(address);
     List<dynamic> result = await query("balanceOf", [address]);
+    print('address: ${address.}');
     print('In');
     print(result[0]);
     myData = result[0];

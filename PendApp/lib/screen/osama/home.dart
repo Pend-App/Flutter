@@ -12,18 +12,30 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   WalletController controller = Get.put((WalletController()));
+
+  bool _isLoading = false;
+
+  getBalance() async {
+    setState(() => _isLoading = true);
+    await controller.getBalance();
+    controller.update();
+    setState(() => _isLoading = false);
+  }
+
+  @override
+  void initState() {
+    getBalance();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    controller.getBalance();
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-
             header(),
-
-
             menuBottom(),
             SizedBox(
               height: 20.0,
@@ -39,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
       children: <Widget>[
         Container(
           color: colorStyle.primaryColor,
-          padding: EdgeInsets.only(left: 20.0, bottom: 70.0, right:  20.0),
+          padding: EdgeInsets.only(left: 20.0, bottom: 70.0, right: 20.0),
           child: Stack(
             children: <Widget>[
               Padding(
@@ -72,19 +84,20 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(left: 20.0),
-                                child: Text(
-                                  controller.myData.toString(),
-                                  style: TextStyle(
-                                    color: Color(0xffd0993c),
-                                    fontSize: 30.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                                child: _isLoading
+                                    ? CircularProgressIndicator(color: colorStyle.goldColors)
+                                    : Text(
+                                        controller.myData.toString(),
+                                        style: TextStyle(
+                                          color: Color(0xffd0993c),
+                                          fontSize: 30.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                               ),
                             ],
                           ),
                         ),
-
                       ],
                     ),
                     Padding(
@@ -168,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         height: 4.0,
                       ),
-                      Text("Scan", style: TextStyle(color:colorStyle.primaryColor.withOpacity(0.8), fontFamily: "Popins")),
+                      Text("Scan", style: TextStyle(color: colorStyle.primaryColor.withOpacity(0.8), fontFamily: "Popins")),
                     ],
                   ),
                 ),
@@ -242,8 +255,9 @@ class _HomeScreenState extends State<HomeScreen> {
             Container(
               height: 110.0,
               width: 4.5,
-              decoration:
-                  BoxDecoration(color: colorStyle.primaryColor.withOpacity(0.8), borderRadius: BorderRadius.only(topLeft: Radius.circular(20.0), bottomLeft: Radius.circular(20.0))),
+              decoration: BoxDecoration(
+                  color: colorStyle.primaryColor.withOpacity(0.8),
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(20.0), bottomLeft: Radius.circular(20.0))),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 10.0),

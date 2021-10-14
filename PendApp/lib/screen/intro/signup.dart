@@ -4,6 +4,7 @@ import 'package:firebase_phone_auth_handler/firebase_phone_auth_handler.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart' as GetX;
 import 'package:pend_tech/Controller/WalletController.dart';
+import 'package:pend_tech/exception/auth_exception.dart';
 import 'package:pend_tech/screen/osama/alertSnakBar.dart';
 import 'package:pend_tech/screen/osama/encryption_model.dart';
 import 'dart:math';
@@ -13,7 +14,6 @@ import 'package:pend_tech/component/style.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
-import '../osama/auth_exception.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' as Firestore;
 
 import 'on_Boarding.dart';
@@ -51,7 +51,7 @@ class _signUpState extends State<signUp> {
     print("Hossary" + address.hex);
     print("Shebl" + encrypt(wallet.toJson()));
     print("Mostafa" + decrypt(encrypt(wallet.toJson())));
-    print("Eslam" + await unlocked.toString());
+ //   print("Eslam" + await unlocked.toString());
   }
 
   PostIPFS(String name, String phone, String pass, String Json) async {
@@ -97,7 +97,7 @@ class _signUpState extends State<signUp> {
         ScaffoldMessenger.of(context).showSnackBar(alertSnackBar(context, e.message));
         return;
       } on FirebaseAuthException catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(alertSnackBar(context, e.message ?? 'something went wrong\nplease try again later'));
+        ScaffoldMessenger.of(context).showSnackBar(alertSnackBar(context, e.message ?? 'something went wrong please try again later'));
         return;
       } catch (e) {
         print('other exception: $e');
@@ -154,17 +154,13 @@ class _signUpState extends State<signUp> {
                                     height: 50.0,
                                     width: double.infinity,
                                     decoration: BoxDecoration(
-                                      color: colorStyle.blueColor,
+                                      color: colorStyle.accentColor,
                                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                                      border: Border.all(
-                                        color: colorStyle.blueColor,
-                                        width: 0.35,
-                                      ),
                                     ),
                                     child: Center(
                                       child: Text(
                                         "Send code",
-                                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 17.5, letterSpacing: 1.9),
+                                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.w400, fontSize: 17.5, letterSpacing: 1.9),
                                       ),
                                     ),
                                   ),
@@ -227,14 +223,13 @@ class _signUpState extends State<signUp> {
                                             height: 50.0,
                                             width: double.infinity,
                                             decoration: BoxDecoration(
-                                              color: colorStyle.blueColor,
+                                              color: colorStyle.accentColor,
                                               borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                                              border: Border.all(color: colorStyle.blueColor, width: 0.35),
                                             ),
                                             child: Center(
                                               child: Text(
                                                 "Verify",
-                                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 17.5, letterSpacing: 1.9),
+                                                style: TextStyle(color: Colors.black, fontWeight: FontWeight.w400, fontSize: 17.5, letterSpacing: 1.9),
                                               ),
                                             ),
                                           ),
