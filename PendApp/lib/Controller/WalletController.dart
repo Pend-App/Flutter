@@ -74,7 +74,7 @@ class WalletController extends GetxController {
     final address = await unlocked.extractAddress();
   //  EthereumAddress etherAddress = EthereumAddress.fromHex(address);
     List<dynamic> result = await query("balanceOf", [address]);
-    print('address: ${address.}');
+    //print('address: ${address.hex}');
     print('In');
     print(result[0]);
     myData = result[0];
