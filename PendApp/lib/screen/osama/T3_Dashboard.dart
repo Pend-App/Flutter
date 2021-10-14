@@ -8,6 +8,7 @@ import 'T3_wallet.dart';
 import 'package:flutter/material.dart';
 
 class T3_Dashboard extends StatefulWidget {
+  static const route  = 'dashboard';
   T3_Dashboard({required Key key}) : super(key: key);
 
   _T3_DashboardState createState() => _T3_DashboardState();

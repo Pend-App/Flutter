@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:pend_tech/Services/authservices.dart';
 import 'package:pend_tech/screen/intro/login.dart';
 import 'package:pend_tech/screen/intro/on_Boarding.dart';
+import 'package:pend_tech/screen/osama/T3_Dashboard.dart';
 import 'package:pend_tech/screen/setting/themes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,6 @@ class _myAppState extends State<myApp> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _themeBloc = ThemeBloc();
   }
@@ -54,7 +54,11 @@ class _myAppState extends State<myApp> {
           /// Move splash screen to onBoarding Layout
           /// Routes
           ///
-          routes: <String, WidgetBuilder>{"onBoarding": (BuildContext context) => new login()},
+          routes: <String, WidgetBuilder>{
+            "login": (BuildContext context) => login(),
+            OnBoardingScreen.route: (BuildContext context) => OnBoardingScreen(),
+            T3_Dashboard.route: (BuildContext context) => T3_Dashboard(key: UniqueKey()),
+          },
         );
       },
     );
@@ -63,7 +67,7 @@ class _myAppState extends State<myApp> {
 
 /// Component UI
 class SplashScreen extends StatefulWidget {
-  ThemeBloc themeBloc;
+  final ThemeBloc themeBloc;
 
   SplashScreen({required this.themeBloc});
 
@@ -75,18 +79,17 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   ThemeBloc themeBloc;
 
+  @override
   _SplashScreenState(this.themeBloc);
 
-  @override
-
   /// Setting duration in splash screen
-  startTime() async {
-    return new Timer(Duration(milliseconds: 4500), NavigatorPage);
+  startTime() {
+    return Future.delayed(Duration(milliseconds: 4000)).then((value) => NavigatorPage());
   }
 
   /// To navigate layout change
   void NavigatorPage() {
-    Navigator.of(context).pushReplacementNamed("onBoarding");
+    Navigator.of(context).pushReplacementNamed("login");
   }
 
   /// Declare startTime to InitState

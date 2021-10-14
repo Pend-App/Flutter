@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pend_tech/Controller/WalletController.dart';
@@ -5,6 +6,8 @@ import 'package:pend_tech/Controller/WalletController.dart';
 import 'package:pend_tech/screen/intro/forget_password.dart';
 import 'package:pend_tech/screen/intro/signup.dart';
 import 'package:pend_tech/screen/osama/T3_Dashboard.dart';
+import 'package:pend_tech/screen/osama/alertSnakBar.dart';
+import 'package:pend_tech/screen/osama/auth_exception.dart';
 import 'package:pend_tech/screen/osama/home.dart';
 import 'package:pend_tech/screen/setting/themes.dart';
 import 'package:pend_tech/component/style.dart';
@@ -21,9 +24,45 @@ class _loginState extends State<login> {
   String? _email, _pass;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
+
+  signInFirebase() async {
+    ///TODO: remove temporary validation
+    if (_emailController.value.text.isEmpty) throw authException('please enter the username');
+    if (_passwordController.value.text.isEmpty) throw authException('please enter the password');
+
+    await FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: '${_emailController.value.text}@pend.com', password: _passwordController.value.text)
+        .timeout(Duration(seconds: 30));
+    ;
+  }
 
   Widget build(BuildContext context) {
-    MediaQueryData mediaQuery = MediaQuery.of(context);
+
+    //TODO: validate username and password not empty
+    signIn() async {
+      //TODO: missing Exception handling for this method to complete
+      //TODO: [WalletCreation] not working
+      await controller.ReadWallet(_emailController.text + _passwordController.text, context);
+
+      try{
+        await signInFirebase();
+      }
+      on authException catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(alertSnackBar(context, e.message));
+        return;
+      } on FirebaseAuthException catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(alertSnackBar(context, e.message ?? 'something went wrong\nplease try again later'));
+        return;
+      } catch (e) {
+        print('other exception: $e');
+        ScaffoldMessenger.of(context).showSnackBar(alertSnackBar(context, 'something went wrong. please try again later'));
+        return;
+      }
+
+      Navigator.of(context).pushReplacementNamed(T3_Dashboard.route);
+    }
+
     return Form(
       key: _formKey,
       child: Scaffold(
@@ -117,7 +156,7 @@ class _loginState extends State<login> {
                             child: TextFormField(
                               validator: (input) {
                                 if (input!.isEmpty) {
-                                  return 'Please typle an password';
+                                  return 'Please enter the password';
                                 }
                               },
                               onSaved: (input) => _pass = input!,
@@ -173,15 +212,13 @@ class _loginState extends State<login> {
               Padding(
                 padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 40.0),
                 child: GestureDetector(
-                  onTap: () {
-                    controller.ReadWallet(_emailController.text+_passwordController.text,context);
-
-                    //Todo:
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => T3_Dashboard(
-                              key: UniqueKey(),
-                            )));
-                  },
+                  onTap: _isLoading
+                      ? null
+                      : () async {
+                          setState(() => _isLoading = true);
+                          await signIn();
+                          setState(() => _isLoading = false);
+                        },
                   child: Container(
                     height: 50.0,
                     width: double.infinity,
@@ -190,7 +227,9 @@ class _loginState extends State<login> {
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
                     ),
                     child: Center(
-                      child: Text(
+                      child: _isLoading
+                          ? CircularProgressIndicator(color: colorStyle.primaryColor)
+                          :  Text(
                         "Sign In",
                         style: TextStyle(color: colorStyle.primaryColor, fontWeight: FontWeight.w400, fontSize: 20.0, letterSpacing: 1.0),
                       ),
@@ -198,16 +237,15 @@ class _loginState extends State<login> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 20.0,
-              ),
+              SizedBox(height: 20.0),
               Padding(
                 padding: const EdgeInsets.only(left: 20.0, right: 20.0),
                 child: GestureDetector(
-                  onTap: () {
-
-                    Navigator.of(context).push(PageRouteBuilder(pageBuilder: (_, __, ___) => new signUp()));
-                  },
+                  onTap: _isLoading
+                      ? null
+                      : () {
+                          Navigator.of(context).push(PageRouteBuilder(pageBuilder: (_, __, ___) => signUp()));
+                        },
                   child: Container(
                     height: 50.0,
                     width: double.infinity,
@@ -228,11 +266,14 @@ class _loginState extends State<login> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 20,left: 20,right: 20),
+                padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
                 child: Container(
                   alignment: Alignment.center,
-                  width: MediaQuery.of(context).size.width*0.8,
-                    child: Text("By creating an account you agree to our Terms of Service and Privacy Policy ©",style: TextStyle(color:  Colors.white),),
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: Text(
+                    "By creating an account you agree to our Terms of Service and Privacy Policy ©",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               )
             ],
