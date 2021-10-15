@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:firebase_phone_auth_handler/firebase_phone_auth_handler.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart' as GetX;
@@ -15,7 +14,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' as Firestore;
-
 import 'on_Boarding.dart';
 
 class signUp extends StatefulWidget {
@@ -51,7 +49,7 @@ class _signUpState extends State<signUp> {
     print("Hossary" + address.hex);
     print("Shebl" + encrypt(wallet.toJson()));
     print("Mostafa" + decrypt(encrypt(wallet.toJson())));
- //   print("Eslam" + await unlocked.toString());
+    print("Eslam" + await unlocked.toString());
   }
 
   PostIPFS(String name, String phone, String pass, String Json) async {
@@ -65,9 +63,20 @@ class _signUpState extends State<signUp> {
 
     dio
         .post('https://ipfs.infura.io:5001/api/v0/add', data: FormData.fromMap(a), options: Options(headers: <String, String>{'authorization': auth}))
-        .then((value) => {print(value)});
+        .then((value) => {
+      UploadToFireStore(value.data["Hash"].toString())
+        });
   }
 
+  UploadToFireStore(String hash)
+  async{
+    Firestore.DocumentReference documentReference = Firestore.FirebaseFirestore.instance
+        .collection("Request")
+        .doc(hash);
+    documentReference.set({
+      "HASH": hash,
+    });
+  }
   //TODO: check password match
   //TODO: validate username and password not empty
   //TODO: password credential regex
@@ -94,7 +103,8 @@ class _signUpState extends State<signUp> {
       try {
         await createUser();
       } on authException catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(alertSnackBar(context, e.message));
+
+        ScaffoldMessenger.of(context).showSnackBar(alertSnackBar(context, "The username already taken"));
         return;
       } on FirebaseAuthException catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(alertSnackBar(context, e.message ?? 'something went wrong please try again later'));
@@ -209,14 +219,14 @@ class _signUpState extends State<signUp> {
                                             // return;
 
                                             if (_otp.text.length != 6) {
-                                              print("Please enter a valid 6 digit OTP");
+                                              ScaffoldMessenger.of(context).showSnackBar(alertSnackBar(context, 'Please enter a valid 6 digit OTP'));
+
                                             } else {
                                               final res = await controller.verifyOTP(otp: _otp.text);
                                               // Incorrect OTP
                                               if (!res)
-                                                print(
-                                                  "Please enter the correct OTP sent",
-                                                );
+                                                ScaffoldMessenger.of(context).showSnackBar(alertSnackBar(context, 'Please enter the correct OTP sent'));
+
                                             }
                                           },
                                           child: Container(

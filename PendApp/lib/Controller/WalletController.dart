@@ -17,6 +17,7 @@ class WalletController extends GetxController {
   var apiUrl = "https://rinkeby.infura.io/v3/39e9e246342b4a4aa21b8a8eacb0bde2"; //Replace with your API
   var httpClient = new Client();
   var myData ;
+  var publicKey;
 
   Future<String> getFilePath() async {
     Directory appDocumentsDirectory = await getApplicationDocumentsDirectory(); // 1
@@ -31,11 +32,11 @@ class WalletController extends GetxController {
     if (content.isEmpty) {
       print("NO FILE");
     } else {
+      print(content);
       Wallet wallets = Wallet.fromJson(decrypt(content), passX);
       unlocked = await wallets.privateKey;
 
-      if (unlocked.extractAddress().toString().isEmpty) throw walletException('address is empty');
-    }
+         }
   }
 
   FetchIPFS() async {
@@ -72,9 +73,10 @@ class WalletController extends GetxController {
 
   Future<void> getBalance() async {
     final address = await unlocked.extractAddress();
-  //  EthereumAddress etherAddress = EthereumAddress.fromHex(address);
+//   EthereumAddress etherAddress = EthereumAddress.fromHex(address);
     List<dynamic> result = await query("balanceOf", [address]);
-    //print('address: ${address.hex}');
+    publicKey = address.toString();
+    print(address);
     print('In');
     print(result[0]);
     myData = result[0];

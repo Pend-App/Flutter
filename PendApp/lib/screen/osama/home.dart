@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pend_tech/Controller/WalletController.dart';
 import 'package:pend_tech/component/style.dart';
@@ -12,7 +13,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   WalletController controller = Get.put((WalletController()));
-
   bool _isLoading = false;
 
   getBalance() async {
@@ -47,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget header() {
+    Size size = MediaQuery.of(context).size;
     return Stack(
       children: <Widget>[
         Container(
@@ -82,18 +83,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 20.0),
-                                child: _isLoading
-                                    ? CircularProgressIndicator(color: colorStyle.goldColors)
-                                    : Text(
-                                        controller.myData.toString(),
-                                        style: TextStyle(
-                                          color: Color(0xffd0993c),
-                                          fontSize: 30.0,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
+                              SizedBox(
+                                width: size.width/2,
+                                child:  Padding(
+                                  padding: const EdgeInsets.only(left: 20.0),
+                                  child: _isLoading
+                                      ? CircularProgressIndicator(color: colorStyle.goldColors)
+                                      : Text(
+                                    controller.myData.toString(),
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                      color: Color(0xffd0993c),
+                                      fontSize: 30.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -104,19 +109,31 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: const EdgeInsets.only(top: 10.0),
                       child: Row(
                         children: <Widget>[
-                          Text("WALLET POINTS",
+                          Text("WALLET Key",
                               style: TextStyle(
                                 color: Colors.grey[200],
                                 fontSize: 14.0,
                                 fontFamily: "Sans",
                                 fontWeight: FontWeight.w400,
                               )),
-                          Text(
-                            " 0",
-                            style: TextStyle(
-                              color: Color(0xffd0993c),
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
+                          SizedBox(width: 20,),
+                          controller.publicKey==null
+                              ?CircularProgressIndicator(color: colorStyle.goldColors,)
+                              :GestureDetector(
+                            onTap: ()
+                            {
+                              Clipboard.setData(new ClipboardData(text:  controller.publicKey)).then((_){
+                                Scaffold.of(context).showSnackBar(
+                                    SnackBar(content:Text("Key copied to clipboard")));
+                              });
+                            },
+                            child: Text(
+                              controller.publicKey,
+                              style: TextStyle(
+                                color: Color(0xffd0993c),
+                                fontSize: 11.0,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ],
