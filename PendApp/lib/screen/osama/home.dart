@@ -36,7 +36,6 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: <Widget>[
             header(),
-            menuBottom(),
             SizedBox(
               height: 20.0,
             )
@@ -50,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Size size = MediaQuery.of(context).size;
     return Stack(
       children: <Widget>[
+
         Container(
           color: colorStyle.primaryColor,
           padding: EdgeInsets.only(left: 20.0, bottom: 70.0, right: 20.0),
@@ -57,17 +57,16 @@ class _HomeScreenState extends State<HomeScreen> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(top: 15.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text("WALLET CASH",
                             style: TextStyle(
                               color: Colors.grey[200],
-                              fontSize: 18.0,
+                              fontSize: 14.0,
                               fontWeight: FontWeight.w400,
                             )),
                         Padding(
@@ -83,21 +82,37 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
                               ),
-                              SizedBox(
-                                width: size.width/2,
-                                child:  Padding(
-                                  padding: const EdgeInsets.only(left: 20.0),
-                                  child: _isLoading
-                                      ? CircularProgressIndicator(color: colorStyle.goldColors)
-                                      : Text(
-                                    controller.myData.toString(),
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                      color: Color(0xffd0993c),
-                                      fontSize: 30.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 20.0),
+                                child: Text(
+                                  "0",
+                                  style: TextStyle(
+                                    color: Color(0xffd0993c),
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.bold,
                                   ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: Row(
+                            children: <Widget>[
+                              Text("POINTS",
+                                  style: TextStyle(
+                                    color: Colors.grey[200],
+                                    fontSize: 14.0,
+                                    fontFamily: "Sans",
+                                    fontWeight: FontWeight.w400,
+                                  )),
+                              Text(
+                                " 0",
+                                style: TextStyle(
+                                  color: Color(0xffd0993c),
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ],
@@ -105,43 +120,39 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10.0),
-                      child: Row(
-                        children: <Widget>[
-                          Text("WALLET Key",
-                              style: TextStyle(
-                                color: Colors.grey[200],
-                                fontSize: 14.0,
-                                fontFamily: "Sans",
-                                fontWeight: FontWeight.w400,
-                              )),
-                          SizedBox(width: 20,),
-                          controller.publicKey==null
-                              ?CircularProgressIndicator(color: colorStyle.goldColors,)
-                              :GestureDetector(
-                            onTap: ()
-                            {
-                              Clipboard.setData(new ClipboardData(text:  controller.publicKey)).then((_){
-                                Scaffold.of(context).showSnackBar(
-                                    SnackBar(content:Text("Key copied to clipboard")));
-                              });
-                            },
-                            child: Text(
-                              controller.publicKey,
-                              style: TextStyle(
-                                color: Color(0xffd0993c),
-                                fontSize: 11.0,
-                                fontWeight: FontWeight.bold,
+                    Row(
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.all(10.0),
+                          child: Icon(
+                            Icons.refresh,
+                            color: Colors.white,
+                            size: 28.0,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10.0),
+                          child: Container(
+                            height: 45.0,
+                            width: 100.0,
+                            child: RaisedButton(
+                              child: Text(
+                                "TOP UP",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
                               ),
+                              color: Color(0xFF21bfb3),
+                              onPressed: () {},
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
+
             ],
           ),
         ),
@@ -175,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         height: 7.0,
                       ),
-                      Text("Transfer", style: TextStyle(color: colorStyle.primaryColor.withOpacity(0.8), fontFamily: "Popins", fontSize: 13.0)),
+                      Text("Withdraw", style: TextStyle(color: colorStyle.primaryColor.withOpacity(0.8), fontFamily: "Popins", fontSize: 13.0)),
                     ],
                   ),
                 ),
@@ -198,7 +209,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         height: 4.0,
                       ),
-                      Text("Scan", style: TextStyle(color: colorStyle.primaryColor.withOpacity(0.8), fontFamily: "Popins")),
+                      Text("Upload", style: TextStyle(color: colorStyle.primaryColor.withOpacity(0.8), fontFamily: "Popins")),
                     ],
                   ),
                 ),
@@ -221,7 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         height: 8.0,
                       ),
-                      Text("Profile", style: TextStyle(color: colorStyle.primaryColor.withOpacity(0.8), fontFamily: "Popins")),
+                      Text("Cards", style: TextStyle(color: colorStyle.primaryColor.withOpacity(0.8), fontFamily: "Popins")),
                     ],
                   ),
                 ),

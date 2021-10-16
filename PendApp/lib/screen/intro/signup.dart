@@ -18,7 +18,6 @@ import 'on_Boarding.dart';
 
 class signUp extends StatefulWidget {
   signUp();
-
   @override
   _signUpState createState() => _signUpState();
 }
@@ -64,23 +63,56 @@ class _signUpState extends State<signUp> {
     dio
         .post('https://ipfs.infura.io:5001/api/v0/add', data: FormData.fromMap(a), options: Options(headers: <String, String>{'authorization': auth}))
         .then((value) => {
-      UploadToFireStore(value.data["Hash"].toString())
+     // print(value.data["Hash"].toString())
         });
   }
 
-  UploadToFireStore(String hash)
-  async{
-    Firestore.DocumentReference documentReference = Firestore.FirebaseFirestore.instance
-        .collection("Request")
-        .doc(hash);
-    documentReference.set({
-      "HASH": hash,
-    });
-  }
-  //TODO: check password match
   //TODO: validate username and password not empty
   //TODO: password credential regex
   //TODO: show password option
+  register() async {
+    try {
+      await createUser();
+    } on authException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(alertSnackBar(context, "The username already taken"));
+      return;
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(alertSnackBar(context, e.message ?? 'something went wrong please try again later'));
+      return;
+    } catch (e) {
+      print('other exception: $e');
+      ScaffoldMessenger.of(context).showSnackBar(alertSnackBar(context, 'something went wrong. please try again later'));
+      return;
+    }
+
+    //TODO: missing Exception handling for this method to complete
+    //TODO: [WalletCreation] not working
+    await WalletCreation();
+
+    Navigator.of(context).pushReplacementNamed(OnBoardingScreen.route);
+  }
+  PhoneRegister() async {
+    try {
+      await checkPhone();
+    } on authException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(alertSnackBar(context, "The phone number already taken"));
+      return;
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(alertSnackBar(context,"The phone number already taken"));
+      return;
+    } catch (e) {
+      print('other exception: $e');
+      Navigator.of(context).pushReplacement(PageRouteBuilder(pageBuilder: (_, __, ___) => OnBoardingScreen()));
+
+      return;
+    }
+
+    //TODO: missing Exception handling for this method to complete
+    //TODO: [WalletCreation] not working
+    await WalletCreation();
+
+    Navigator.of(context).push(PageRouteBuilder(pageBuilder: (_, __, ___) => OnBoardingScreen()));
+  }
 
   createUser() async {
     ///TODO: remove temporary validation
@@ -92,6 +124,17 @@ class _signUpState extends State<signUp> {
         .createUserWithEmailAndPassword(email: '${_emailController.value.text}@pend.com', password: _passwordController.value.text)
         .timeout(Duration(seconds: 30));
   }
+  checkPhone() async {
+    ///TODO: remove temporary validation
+    if (_emailController.value.text.length < 4) throw authException('please enter username');
+    if (_passwordController.value.text.length < 4) throw authException('password must be at least 6 digits');
+    if (_passwordController.value.text != _confirmPasswordController.value.text) throw authException('password did\'t match');
+
+    await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: '${_phone.value.text}@pend.com', password: _phone.value.text)
+        .timeout(Duration(seconds: 30));
+    await register();
+  }
 
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -99,28 +142,6 @@ class _signUpState extends State<signUp> {
     /// this function triggered when register button pressed
     /// first registers new user on firebase and handles exceptions via SnackBar
     /// then it creates user wallets
-    register() async {
-      try {
-        await createUser();
-      } on authException catch (e) {
-
-        ScaffoldMessenger.of(context).showSnackBar(alertSnackBar(context, "The username already taken"));
-        return;
-      } on FirebaseAuthException catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(alertSnackBar(context, e.message ?? 'something went wrong please try again later'));
-        return;
-      } catch (e) {
-        print('other exception: $e');
-        ScaffoldMessenger.of(context).showSnackBar(alertSnackBar(context, 'something went wrong. please try again later'));
-        return;
-      }
-
-      //TODO: missing Exception handling for this method to complete
-      //TODO: [WalletCreation] not working
-      await WalletCreation();
-      
-      Navigator.of(context).pushReplacementNamed(OnBoardingScreen.route);
-    }
 
     return FirebasePhoneAuthProvider(
       child: Scaffold(
@@ -164,7 +185,7 @@ class _signUpState extends State<signUp> {
                                     height: 50.0,
                                     width: double.infinity,
                                     decoration: BoxDecoration(
-                                      color: colorStyle.accentColor,
+                                      color: colorStyle.blueColor,
                                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
                                     ),
                                     child: Center(
@@ -233,7 +254,7 @@ class _signUpState extends State<signUp> {
                                             height: 50.0,
                                             width: double.infinity,
                                             decoration: BoxDecoration(
-                                              color: colorStyle.accentColor,
+                                              color: colorStyle.blueColor,
                                               borderRadius: BorderRadius.all(Radius.circular(5.0)),
                                             ),
                                             child: Center(
@@ -302,14 +323,14 @@ class _signUpState extends State<signUp> {
                                 ? null
                                 : () async {
                                     setState(() => _isLoading = true);
-                                    await register();
+                                    await PhoneRegister();
                                     setState(() => _isLoading = false);
                                   },
                             child: Container(
                               height: 50.0,
                               width: double.infinity,
                               decoration: BoxDecoration(
-                                color: colorStyle.accentColor,
+                                color: colorStyle.blueColor,
                                 borderRadius: BorderRadius.all(Radius.circular(5.0)),
                               ),
                               child: Center(

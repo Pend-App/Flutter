@@ -244,7 +244,7 @@ class _loginState extends State<login> {
                     height: 50.0,
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: colorStyle.accentColor,
+                      color: colorStyle.blueColor,
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
                     ),
                     child: Center(
@@ -272,7 +272,7 @@ class _loginState extends State<login> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                      color: colorStyle.accentColor,
+                      color: colorStyle.blueColor,
                       border: Border.all(
                         width: 0.35,
                       ),

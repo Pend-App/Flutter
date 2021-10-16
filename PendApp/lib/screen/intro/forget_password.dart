@@ -68,7 +68,7 @@ class _forgetPasswordState extends State<forgetPassword> {
                   height: 50.0,
                   width: MediaQuery.of(context).size.width/2,
                   decoration: BoxDecoration(
-                    color: colorStyle.accentColor,
+                    color: colorStyle.blueColor,
                     borderRadius: BorderRadius.all(Radius.circular(5.0)),
                   ),
                   child: Center(
@@ -91,7 +91,7 @@ class _forgetPasswordState extends State<forgetPassword> {
                   height: 50.0,
                   width: MediaQuery.of(context).size.width/3,
                   decoration: BoxDecoration(
-                    color: colorStyle.accentColor,
+                    color: colorStyle.blueColor,
                     borderRadius: BorderRadius.all(Radius.circular(5.0)),
                   ),
                   child: Center(
