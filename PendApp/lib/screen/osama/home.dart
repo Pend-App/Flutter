@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pend_tech/Controller/WalletController.dart';
 import 'package:pend_tech/component/style.dart';
-import 'shared_preferences.dart';
+import 'models/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({required Key key}) : super(key: key);

@@ -3,6 +3,8 @@ import 'package:pend_tech/Services/authservices.dart';
 import 'package:pend_tech/screen/intro/login.dart';
 import 'package:pend_tech/screen/intro/on_Boarding.dart';
 import 'package:pend_tech/screen/osama/T3_Dashboard.dart';
+import 'package:pend_tech/screen/osama/create_wallet.dart';
+import 'package:pend_tech/screen/osama/wallets_screen.dart';
 import 'package:pend_tech/screen/setting/themes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +51,8 @@ class _myAppState extends State<myApp> {
           title: 'PEND',
           theme: snapshot.data,
           debugShowCheckedModeBanner: false,
-          home: SplashScreen(themeBloc: _themeBloc),
+          //home: SplashScreen(themeBloc: _themeBloc),
+          home: CreateWallet(),
 
           /// Move splash screen to onBoarding Layout
           /// Routes
@@ -58,6 +61,8 @@ class _myAppState extends State<myApp> {
             "login": (BuildContext context) => login(),
             OnBoardingScreen.route: (BuildContext context) => OnBoardingScreen(),
             T3_Dashboard.route: (BuildContext context) => T3_Dashboard(key: UniqueKey()),
+            WalletsScreen.route: (BuildContext context) => WalletsScreen(),
+            CreateWallet.route: (BuildContext context) => CreateWallet(),
           },
         );
       },

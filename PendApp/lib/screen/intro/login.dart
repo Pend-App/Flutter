@@ -8,7 +8,7 @@ import 'package:pend_tech/exception/wallet_exception.dart';
 import 'package:pend_tech/screen/intro/forget_password.dart';
 import 'package:pend_tech/screen/intro/signup.dart';
 import 'package:pend_tech/screen/osama/T3_Dashboard.dart';
-import 'package:pend_tech/screen/osama/alertSnakBar.dart';
+import 'package:pend_tech/screen/osama/widgets/alertSnakBar.dart';
 import 'package:pend_tech/screen/osama/home.dart';
 import 'package:pend_tech/screen/setting/themes.dart';
 import 'package:pend_tech/component/style.dart';
