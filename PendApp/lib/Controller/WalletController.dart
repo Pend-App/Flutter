@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
-import 'package:pend_tech/screen/osama/encryption_model.dart';
+import 'package:pend_tech/screen/osama/models/encryption_model.dart';
 import 'package:web3dart/web3dart.dart';
 import 'dart:convert';
 import 'dart:io';
