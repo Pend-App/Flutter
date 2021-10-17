@@ -106,7 +106,7 @@ class _T3_DashboardState extends State<T3_Dashboard>
                                         Icons.home_filled,
                                         size: 19.0,
                                       ),
-                                      text: "Pend",
+                                      text: "MyPend",
                                     ),
                                     new Tab(
                                       icon: Icon(
@@ -120,7 +120,7 @@ class _T3_DashboardState extends State<T3_Dashboard>
                                         Icons.account_balance,
                                         size: 19.0,
                                       ),
-                                      text: "Spent",
+                                      text: "Spend",
                                     ),
                                     new Tab(
                                       icon: Icon(

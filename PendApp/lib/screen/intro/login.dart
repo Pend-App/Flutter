@@ -63,7 +63,16 @@ class _loginState extends State<login> {
         ScaffoldMessenger.of(context).showSnackBar(alertSnackBar(context, 'something went wrong. please try again later'));
         return;
       } catch (e){
-        print('other wallet exception: $e');
+          if(e.toString() ==
+              "Invalid argument(s): Could not unlock wallet file. You either supplied the wrong password or the file is corrupted")
+            {
+              ScaffoldMessenger.of(context).showSnackBar(alertSnackBar(context, 'This account is not associated with this device'));
+              FirebaseAuth.instance.signOut();
+            }
+          else{
+            ScaffoldMessenger.of(context).showSnackBar(alertSnackBar(context, e.toString()));
+          }
+        print(e.toString());
         return;
       }
 
@@ -209,12 +218,12 @@ class _loginState extends State<login> {
                 padding: const EdgeInsets.only(right: 23.0, top: 9.0),
                 child: InkWell(
                     onTap: () {
-                      Navigator.of(context).pushReplacement(PageRouteBuilder(pageBuilder: (_, __, ___) => forgetPassword()));
+                      Navigator.of(context).push(PageRouteBuilder(pageBuilder: (_, __, ___) => forgetPassword()));
                     },
                     child: Align(
                         alignment: Alignment.centerRight,
                         child: Text(
-                          "Forget Password ?",
+                          "Restore account ?",
                           style: TextStyle(
                             color: Colors.white70,
                             fontSize: 12.0,
@@ -235,7 +244,7 @@ class _loginState extends State<login> {
                     height: 50.0,
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: colorStyle.accentColor,
+                      color: colorStyle.blueColor,
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
                     ),
                     child: Center(
@@ -263,7 +272,7 @@ class _loginState extends State<login> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                      color: colorStyle.accentColor,
+                      color: colorStyle.blueColor,
                       border: Border.all(
                         width: 0.35,
                       ),
