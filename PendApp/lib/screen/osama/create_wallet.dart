@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
-
 final Color background2 = Color(0xFF222945);
 final Color background = Color.fromRGBO(20, 28, 53, 1);
+final gColor = Color.fromRGBO(20, 232, 237, 1);
+final gColor2 = Color.fromRGBO(3, 161, 234, 1);
 
 class CreateWallet extends StatelessWidget {
   const CreateWallet({Key? key}) : super(key: key);
@@ -11,8 +12,6 @@ class CreateWallet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       backgroundColor: background,
       body: Center(
@@ -22,7 +21,10 @@ class CreateWallet extends StatelessWidget {
               padding: const EdgeInsets.only(top: 100, bottom: 20),
               child: CircleAvatar(
                 backgroundColor: background2,
-                child: Image.asset('assets/image/create_wallet.png',height: 70,),
+                child: Image.asset(
+                  'assets/image/create_wallet.png',
+                  height: 70,
+                ),
                 radius: 80,
               ),
             ),
@@ -30,8 +32,15 @@ class CreateWallet extends StatelessWidget {
               'Create new wallet',
               style: TextStyle(fontSize: 20, fontFamily: 'Popins'),
             ),
-
-
+            SizedBox(height: 16),
+            Text(
+              'Select which wallet you want to add',
+              style: TextStyle(fontSize: 18, fontFamily: 'Sans', color: Colors.blueGrey),
+            ),
+            Spacer(),
+            button(text: 'Bank account',onTap: (){}),
+            button(text: 'Smart wallet',onTap: (){}),
+            Spacer(),
           ],
         ),
       ),
@@ -42,25 +51,37 @@ class CreateWallet extends StatelessWidget {
 class button extends StatelessWidget {
   final String text;
   final VoidCallback onTap;
-  const button({Key? key,required this.text,required this.onTap}) : super(key: key);
+
+  const button({Key? key, required this.text, required this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 40),
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: background2,
-        borderRadius: BorderRadius.circular(25),
+    return InkWell(
+      borderRadius: BorderRadius.circular(25),
+      onTap: onTap,
+      child: Container(
+        height: 50,
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 40),
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: background2,
+          borderRadius: BorderRadius.circular(25),
+        ),
+        child: Row(
+          children: [
+            Container(
+              height: 50,
+              width: 50,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: LinearGradient(colors: [gColor, gColor2]),
+              ),
+            ),
+            SizedBox(width: 16),
+            Text(text, style: TextStyle(fontSize: 16, fontFamily: 'Sans'),)
+          ],
+        ),
       ),
-      child: Row(children: [
-        Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-      //  gradient: LinearGradient(colors: [gColor, gColor2],
-          ),
-        )
-      ],),
     );
   }
 }
