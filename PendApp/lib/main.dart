@@ -52,7 +52,7 @@ class _myAppState extends State<myApp> {
           theme: snapshot.data,
           debugShowCheckedModeBanner: false,
           //home: SplashScreen(themeBloc: _themeBloc),
-          home: CreateWallet(),
+          home: T3_Dashboard(key: UniqueKey()),
 
           /// Move splash screen to onBoarding Layout
           /// Routes
