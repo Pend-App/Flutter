@@ -1,38 +1,49 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:pend_tech/component/style.dart';
+import 'package:pend_tech/screen/MainButtons/ImageHashIPFS.dart';
+import 'package:pend_tech/screen/MainButtons/SmartWalletTWithdraw.dart';
 
 final Color background2 = Color(0xFF222945);
 final Color background = Color.fromRGBO(20, 28, 53, 1);
 final gColor = Color.fromRGBO(20, 232, 237, 1);
 final gColor2 = Color.fromRGBO(3, 161, 234, 1);
 
-class CreateWallet extends StatelessWidget {
-  const CreateWallet({Key? key}) : super(key: key);
+class CreateWalletTwo extends StatelessWidget {
+  const CreateWalletTwo({Key? key}) : super(key: key);
 
   static const route = 'createWallet';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: background,
-      body: Center(
-        child: Column(
-          children: [
+      backgroundColor: colorStyle.primaryColor,
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            children: [
 
-            Text(
-              'Create new wallet',
-              style: TextStyle(fontSize: 20, fontFamily: 'Popins'),
-            ),
-            SizedBox(height: 16),
-            // Text(
-            //   'Select which wallet you want to add',
-            //   style: TextStyle(fontSize: 18, fontFamily: 'Sans', color: Colors.blueGrey),
-            // ),
-            Spacer(),
-            button(text: 'add text', onTap: () {}),
-            button(text: 'add image', onTap: () {}),
-            Spacer(),
-          ],
+              Text(
+                'Create new wallet',
+                style: TextStyle(fontSize: 20, fontFamily: 'Popins'),
+              ),
+              SizedBox(height: 16),
+              // Text(
+              //   'Select which wallet you want to add',
+              //   style: TextStyle(fontSize: 18, fontFamily: 'Sans', color: Colors.blueGrey),
+              // ),
+              Spacer(),
+              button(text: 'add text', onTap: () {
+                Navigator.of(context).push(PageRouteBuilder(pageBuilder: (_, __, ___) => SmartWalletWithDraw()));
+
+              }),
+              button(text: 'add image', onTap: () {
+                Navigator.of(context).push(PageRouteBuilder(pageBuilder: (_, __, ___) => ImageHash()));
+
+              }),
+              Spacer(),
+            ],
+          ),
         ),
       ),
     );

@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart' as GetX;
 import 'package:pend_tech/Controller/WalletController.dart';
 import 'package:pend_tech/exception/auth_exception.dart';
-import 'package:pend_tech/screen/osama/widgets/alertSnakBar.dart';
-import 'package:pend_tech/screen/osama/models/encryption_model.dart';
+import 'package:pend_tech/screen/osama/alertSnakBar.dart';
+import 'package:pend_tech/screen/osama/encryption_model.dart';
 import 'dart:math';
 import 'package:web3dart/web3dart.dart';
 import 'package:flutter/material.dart';
@@ -142,7 +142,6 @@ class _signUpState extends State<signUp> {
     /// this function triggered when register button pressed
     /// first registers new user on firebase and handles exceptions via SnackBar
     /// then it creates user wallets
-
     return FirebasePhoneAuthProvider(
       child: Scaffold(
         body: SingleChildScrollView(

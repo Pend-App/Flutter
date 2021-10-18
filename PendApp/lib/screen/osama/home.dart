@@ -3,7 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pend_tech/Controller/WalletController.dart';
 import 'package:pend_tech/component/style.dart';
-import 'models/shared_preferences.dart';
+import 'package:pend_tech/screen/MainButtons/SmartWalletTWithdraw.dart';
+import 'package:pend_tech/screen/MainButtons/WithDraw.dart';
+import 'package:pend_tech/screen/osama/wallets_screen.dart';
+import 'create_wallet.dart';
+import 'create_wallet2.dart';
+import 'shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({required Key key}) : super(key: key);
@@ -143,7 +148,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               color: Color(0xFF21bfb3),
-                              onPressed: () {},
+                              onPressed: () {
+                                 controller.getHash();
+                                 controller.update();
+
+                              },
                             ),
                           ),
                         ),
@@ -156,10 +165,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
-
-        ///
-        /// Box transfer, scan, profile
-        ///
         Padding(
           padding: EdgeInsets.only(top: 130.0, left: 20.0, right: 20.0),
           child: Container(
@@ -175,19 +180,24 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 12.0),
-                  child: Column(
-                    children: <Widget>[
-                      Image.asset(
-                        "assets/image/Template_3/transfer.png",
-                        height: 30.0,
-                      ),
-                      SizedBox(
-                        height: 7.0,
-                      ),
-                      Text("Withdraw", style: TextStyle(color: colorStyle.primaryColor.withOpacity(0.8), fontFamily: "Popins", fontSize: 13.0)),
-                    ],
+                GestureDetector(
+                  onTap: (){
+                    Navigator.of(context).push(PageRouteBuilder(pageBuilder: (_, __, ___) => CreateWallet()));
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 12.0),
+                    child: Column(
+                      children: <Widget>[
+                        Image.asset(
+                          "assets/image/Template_3/transfer.png",
+                          height: 30.0,
+                        ),
+                        SizedBox(
+                          height: 7.0,
+                        ),
+                        Text("Withdraw", style: TextStyle(color: colorStyle.primaryColor.withOpacity(0.8), fontFamily: "Popins", fontSize: 13.0)),
+                      ],
+                    ),
                   ),
                 ),
                 Padding(
@@ -198,7 +208,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: Colors.black12,
                   ),
                 ),
-                Padding(
+                GestureDetector(
+                  onTap: (){
+                    Navigator.of(context).push(PageRouteBuilder(pageBuilder: (_, __, ___) => CreateWalletTwo()));
+                  },
+                  child: Padding(
                   padding: const EdgeInsets.only(top: 12.0),
                   child: Column(
                     children: <Widget>[
@@ -212,7 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Text("Upload", style: TextStyle(color: colorStyle.primaryColor.withOpacity(0.8), fontFamily: "Popins")),
                     ],
                   ),
-                ),
+                ),),
                 Padding(
                   padding: const EdgeInsets.only(left: 10.0),
                   child: Container(
@@ -221,21 +235,26 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: Colors.black12,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 9.0),
-                  child: Column(
-                    children: <Widget>[
-                      Image.asset(
-                        "assets/image/Template_3/people.png",
-                        height: 30.0,
-                      ),
-                      SizedBox(
-                        height: 8.0,
-                      ),
-                      Text("Cards", style: TextStyle(color: colorStyle.primaryColor.withOpacity(0.8), fontFamily: "Popins")),
-                    ],
-                  ),
-                ),
+               GestureDetector(
+                 onTap: (){
+                   Navigator.of(context).push(PageRouteBuilder(pageBuilder: (_, __, ___) => WalletsScreen()));
+                 },
+                 child: Padding(
+                   padding: const EdgeInsets.only(top: 9.0),
+                   child: Column(
+                     children: <Widget>[
+                       Image.asset(
+                         "assets/image/Template_3/people.png",
+                         height: 30.0,
+                       ),
+                       SizedBox(
+                         height: 8.0,
+                       ),
+                       Text("Cards", style: TextStyle(color: colorStyle.primaryColor.withOpacity(0.8), fontFamily: "Popins")),
+                     ],
+                   ),
+                 ),
+               ),
               ],
             ),
           ),

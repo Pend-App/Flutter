@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
-import 'package:pend_tech/screen/osama/models/encryption_model.dart';
+import 'package:pend_tech/screen/osama/encryption_model.dart';
 import 'package:web3dart/web3dart.dart';
 import 'dart:convert';
 import 'dart:io';
@@ -37,13 +37,11 @@ class WalletController extends GetxController {
          }
   }
 
-  FetchIPFS() async {
+  FetchIPFS(String hash) async {
     String username = '1zPDRpuNnp13PuZF2rKPPT05i2M';
     String password = 'fadf76b64fcfbe02e43befe04a6e8aeb';
     var auth = 'Basic ' + base64Encode(utf8.encode('$username:$password'));
-
-    dio
-        .post('https://ipfs.infura.io:5001/api/v0/cat?arg=QmVn1znsuJbDrMwDjcNcXx5ppDnb6tMtMNkGiUUDBnntfP',
+    dio.post('https://ipfs.infura.io:5001/api/v0/cat?arg=$hash',
             data: {'param': []}, options: Options(headers: <String, String>{'authorization': auth}))
         .then((value) => {print(value)});
   }
@@ -57,9 +55,29 @@ class WalletController extends GetxController {
     return contract;
   }
 
+  Future<DeployedContract> loadHashContract() async {
+    String abi = await rootBundle.loadString("assets/cred.json");
+    String contractAddress = "0xA47f3F3006AbD9825EF19ddE208a948e3CB96eAD";
+
+    final contract = DeployedContract(ContractAbi.fromJson(abi, "IDCred"), EthereumAddress.fromHex(contractAddress));
+
+    return contract;
+  }
+
   Future<List<dynamic>> query(String functionName, List<dynamic> args) async {
     var ethClient = new Web3Client(apiUrl, httpClient);
     final contract = await loadContract();
+    final ethFunction = contract.function(functionName);
+
+    // This line below doesn't work.
+    final result = await ethClient.call(contract: contract, function: ethFunction, params: args);
+
+    // print(result.toString());
+    return result;
+  }
+  Future<List<dynamic>> hashContract(String functionName, List<dynamic> args) async {
+    var ethClient = new Web3Client(apiUrl, httpClient);
+    final contract = await loadHashContract();
     final ethFunction = contract.function(functionName);
 
     // This line below doesn't work.
@@ -79,6 +97,15 @@ class WalletController extends GetxController {
     print(result[0]);
     myData = result[0];
     print(myData.toString() + "YES");
+    update();
+  }
+  Future<void> getHash() async {
+    final address = await unlocked.extractAddress();
+   EthereumAddress etherAddress = EthereumAddress.fromHex("0x308D4F37944B1bBdaD6Dc61f5409f74156d96E84");
+    List<dynamic> result = await hashContract("getUserText", [etherAddress]);
+    publicKey = address.toString();
+    myData = result[0];
+    print(myData.toString() + "Hash");
     update();
   }
 
