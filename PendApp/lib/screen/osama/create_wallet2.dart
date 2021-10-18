@@ -18,30 +18,19 @@ class CreateWallet extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 100, bottom: 20),
-              child: CircleAvatar(
-                backgroundColor: background2,
-                child: Image.asset(
-                  'assets/image/create_wallet.png',
-                  height: 70,
-                ),
-                radius: 80,
-              ),
-            ),
+
             Text(
               'Create new wallet',
               style: TextStyle(fontSize: 20, fontFamily: 'Popins'),
             ),
             SizedBox(height: 16),
-            Text(
-              'Select which wallet you want to add',
-              style: TextStyle(fontSize: 18, fontFamily: 'Sans', color: Colors.blueGrey),
-            ),
+            // Text(
+            //   'Select which wallet you want to add',
+            //   style: TextStyle(fontSize: 18, fontFamily: 'Sans', color: Colors.blueGrey),
+            // ),
             Spacer(),
-            button(text: 'Bank account', onTap: () {}),
-            button(text: 'Smart wallet', onTap: () {}),
-            button2(text: 'other wallet', onTap: () {}),
+            button(text: 'add text', onTap: () {}),
+            button(text: 'add image', onTap: () {}),
             Spacer(),
           ],
         ),
